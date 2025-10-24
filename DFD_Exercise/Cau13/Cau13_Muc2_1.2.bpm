@@ -1154,10 +1154,10 @@ Shadow=0</a:DisplayPreferences>
 <c:Symbols>
 <o:FlowSymbol Id="o6">
 <a:CreationDate>1760620868</a:CreationDate>
-<a:ModificationDate>1760621055</a:ModificationDate>
+<a:ModificationDate>1761299822</a:ModificationDate>
 <a:CenterTextOffset>(7380, -61)</a:CenterTextOffset>
-<a:Rect>((-6370,-4383), (8726,9907))</a:Rect>
-<a:ListOfPoints>((8326,8940),(-5745,8940),(-5745,-3983))</a:ListOfPoints>
+<a:Rect>((-6370,-4383), (7766,6519))</a:Rect>
+<a:ListOfPoints>((7366,5549),(-5745,5549),(-5745,-3983))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>12615680</a:LineColor>
@@ -1176,10 +1176,10 @@ SOURCE 0 Arial,8,N</a:FontList>
 </o:FlowSymbol>
 <o:FlowSymbol Id="o10">
 <a:CreationDate>1760620870</a:CreationDate>
-<a:ModificationDate>1760621067</a:ModificationDate>
+<a:ModificationDate>1761299822</a:ModificationDate>
 <a:CenterTextOffset>(2340, 539)</a:CenterTextOffset>
-<a:Rect>((9600,-4660), (16080,7466))</a:Rect>
-<a:ListOfPoints>((10500,7066),(10500,-4260))</a:ListOfPoints>
+<a:Rect>((9600,-4660), (16080,3926))</a:Rect>
+<a:ListOfPoints>((10500,3526),(10500,-4260))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>12615680</a:LineColor>
@@ -1338,10 +1338,10 @@ DISPNAME 0 Arial,8,N</a:FontList>
 </o:ResourceSymbol>
 <o:OrganizationUnitSymbol Id="o7">
 <a:CreationDate>1760620810</a:CreationDate>
-<a:ModificationDate>1760620944</a:ModificationDate>
+<a:ModificationDate>1761299822</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
 <a:EmptyAreaSize>(3374, 1875)</a:EmptyAreaSize>
-<a:Rect>((8326,7066), (15074,10815))</a:Rect>
+<a:Rect>((7366,3526), (14114,7275))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16773874</a:FillColor>
