@@ -8,10 +8,10 @@
 <a:SessionID>00000000-0000-0000-0000-000000000000</a:SessionID>
 <c:Children>
 <o:Model Id="o2">
-<a:ObjectID>EF89D226-998E-4C0C-A9B5-AF7BE6207EF7</a:ObjectID>
-<a:Name>Cau1_Muc2_1.2</a:Name>
-<a:Code>Cau1_Muc2_1.2</a:Code>
-<a:CreationDate>1760829887</a:CreationDate>
+<a:ObjectID>9623E3A0-89D0-4C60-B514-4F2266F7D150</a:ObjectID>
+<a:Name>Cau1_Muc2_1.1</a:Name>
+<a:Code>Cau1_Muc2_1.1</a:Code>
+<a:CreationDate>1760829389</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
 <a:ModificationDate>1761307010</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
@@ -554,12 +554,12 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables</a:ModelOptionsText>
 <a:RepositoryFilename>C:\Users\ASUS\SALES_SYSTEM_MANAGEMENT\ChinhSua\SoDoDFD\Câu 1\Cau1_Muc2_1.2.bpm</a:RepositoryFilename>
 <c:ProcessLanguage>
 <o:Shortcut Id="o3">
-<a:ObjectID>72F19418-8ECC-4530-B3B4-D6FEA1A3E1E9</a:ObjectID>
+<a:ObjectID>ED993EE4-E64F-40FF-9C1D-D8E70BBF32B4</a:ObjectID>
 <a:Name>Data Flow Diagram</a:Name>
 <a:Code>DFD</a:Code>
-<a:CreationDate>1760829886</a:CreationDate>
+<a:CreationDate>1760829389</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760829886</a:ModificationDate>
+<a:ModificationDate>1760829389</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:TargetStereotype/>
 <a:TargetID>B45F50B7-1927-406E-A25B-E8AFB1C13854</a:TargetID>
@@ -568,10 +568,10 @@ ConvTablePath=%_HOME%\Resource Files\Conversion Tables</a:ModelOptionsText>
 </c:ProcessLanguage>
 <c:BusinessProcessDiagrams>
 <o:BusinessProcessDiagram Id="o4">
-<a:ObjectID>9FA05E83-2C27-4D46-99A3-812106FE47DD</a:ObjectID>
-<a:Name>Cau1_Muc2_1.2</a:Name>
-<a:Code>Cau1_Muc2_1.2</a:Code>
-<a:CreationDate>1760829887</a:CreationDate>
+<a:ObjectID>AE019D65-B791-4EB5-BCB6-18D9B72EA9A0</a:ObjectID>
+<a:Name>Cau1_Muc2_1.1</a:Name>
+<a:Code>Cau1_Muc2_1.1</a:Code>
+<a:CreationDate>1760829389</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
 <a:ModificationDate>1761307010</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
@@ -1181,6 +1181,7 @@ Target Arrow=0</a:DisplayPreferences>
 <a:ShadowColor>12632256</a:ShadowColor>
 <a:FontList>CENTER 0 Microsoft Sans Serif,8,N
 SOURCE 0 Microsoft Sans Serif,8,N</a:FontList>
+<a:AutomaticRoutingState>4</a:AutomaticRoutingState>
 <c:SourceSymbol>
 <o:OrganizationUnitSymbol Ref="o6"/>
 </c:SourceSymbol>
@@ -1192,12 +1193,11 @@ SOURCE 0 Microsoft Sans Serif,8,N</a:FontList>
 </c:Object>
 </o:FlowSymbol>
 <o:FlowSymbol Id="o9">
-<a:CreationDate>1760829990</a:CreationDate>
-<a:ModificationDate>1760830045</a:ModificationDate>
-<a:CenterTextOffset>(-2685, -1154)</a:CenterTextOffset>
-<a:CenterTextWidth>4231</a:CenterTextWidth>
-<a:Rect>((-9730,-6175), (8110,10930))</a:Rect>
-<a:ListOfPoints>((-9330,10530),(510,10530),(510,-5550),(7710,-5550))</a:ListOfPoints>
+<a:CreationDate>1760829570</a:CreationDate>
+<a:ModificationDate>1760829600</a:ModificationDate>
+<a:CenterTextOffset>(-3900, 299)</a:CenterTextOffset>
+<a:Rect>((4310,7880), (14755,22209))</a:Rect>
+<a:ListOfPoints>((4710,19920),(14130,19920),(14130,8280))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>12615680</a:LineColor>
@@ -1232,10 +1232,10 @@ SOURCE 0 Microsoft Sans Serif,8,N</a:FontList>
 <o:ProcessSymbol Ref="o10"/>
 </c:SourceSymbol>
 <c:DestinationSymbol>
-<o:OrganizationUnitSymbol Ref="o6"/>
+<o:OrganizationUnitSymbol Ref="o13"/>
 </c:DestinationSymbol>
 <c:Object>
-<o:Flow Ref="o13"/>
+<o:Flow Ref="o16"/>
 </c:Object>
 </o:FlowSymbol>
 <o:ResourceFlowSymbol Id="o14">
@@ -1257,10 +1257,10 @@ SOURCE 0 Arial,8,N</a:FontList>
 <o:ProcessSymbol Ref="o7"/>
 </c:SourceSymbol>
 <c:DestinationSymbol>
-<o:ResourceSymbol Ref="o15"/>
+<o:ResourceSymbol Ref="o18"/>
 </c:DestinationSymbol>
 <c:Object>
-<o:ResourceFlow Ref="o16"/>
+<o:ResourceFlow Ref="o19"/>
 </c:Object>
 </o:ResourceFlowSymbol>
 <o:ResourceFlowSymbol Id="o17">
@@ -1282,34 +1282,34 @@ SOURCE 0 Arial,8,N</a:FontList>
 <o:ProcessSymbol Ref="o10"/>
 </c:SourceSymbol>
 <c:DestinationSymbol>
-<o:ResourceSymbol Ref="o18"/>
+<o:ResourceSymbol Ref="o21"/>
 </c:DestinationSymbol>
 <c:Object>
-<o:ResourceFlow Ref="o19"/>
+<o:ResourceFlow Ref="o22"/>
 </c:Object>
 </o:ResourceFlowSymbol>
-<o:FlowSymbol Id="o20">
-<a:CreationDate>1760830193</a:CreationDate>
-<a:ModificationDate>1760830210</a:ModificationDate>
-<a:CenterTextOffset>(2670, 7676)</a:CenterTextOffset>
-<a:CenterTextWidth>4861</a:CenterTextWidth>
-<a:Rect>((11390,-4630), (22830,11170))</a:Rect>
-<a:ListOfPoints>((11790,-4230),(17730,-4230),(17730,10770))</a:ListOfPoints>
+<o:ResourceFlowSymbol Id="o23">
+<a:CreationDate>1760829786</a:CreationDate>
+<a:ModificationDate>1760829851</a:ModificationDate>
+<a:CenterTextOffset>(-4284, -653)</a:CenterTextOffset>
+<a:Rect>((-23069,-13596), (-15520,4265))</a:Rect>
+<a:ListOfPoints>((-16145,3865),(-16145,-13196))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
-<a:ArrowStyle>1</a:ArrowStyle>
-<a:LineColor>12615680</a:LineColor>
+<a:ArrowStyle>257</a:ArrowStyle>
+<a:LineColor>16711680</a:LineColor>
+<a:DashStyle>1</a:DashStyle>
 <a:ShadowColor>12632256</a:ShadowColor>
-<a:FontList>CENTER 0 Microsoft Sans Serif,8,N
-SOURCE 0 Microsoft Sans Serif,8,N</a:FontList>
+<a:FontList>CENTER 0 Arial,8,N
+SOURCE 0 Arial,8,N</a:FontList>
 <a:AutomaticRoutingState>4</a:AutomaticRoutingState>
 <c:SourceSymbol>
-<o:ProcessSymbol Ref="o10"/>
+<o:ProcessSymbol Ref="o7"/>
 </c:SourceSymbol>
 <c:DestinationSymbol>
-<o:OrganizationUnitSymbol Ref="o21"/>
+<o:ResourceSymbol Ref="o24"/>
 </c:DestinationSymbol>
 <c:Object>
-<o:Flow Ref="o22"/>
+<o:ResourceFlow Ref="o25"/>
 </c:Object>
 </o:FlowSymbol>
 <o:ResourceFlowSymbol Id="o23">
@@ -1360,11 +1360,11 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ResourceFlowSymbol>
 <o:OrganizationUnitSymbol Id="o6">
-<a:CreationDate>1760829906</a:CreationDate>
-<a:ModificationDate>1760830000</a:ModificationDate>
+<a:CreationDate>1760829499</a:CreationDate>
+<a:ModificationDate>1760829580</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
 <a:EmptyAreaSize>(3374, 1875)</a:EmptyAreaSize>
-<a:Rect>((-15644,8071), (-7590,15045))</a:Rect>
+<a:Rect>((-5984,15602), (5430,23235))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16773874</a:FillColor>
@@ -1406,10 +1406,10 @@ DISPNAME 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:OrganizationUnitSymbol>
 <o:ProcessSymbol Id="o7">
-<a:CreationDate>1760829946</a:CreationDate>
-<a:ModificationDate>1760830000</a:ModificationDate>
+<a:CreationDate>1760829509</a:CreationDate>
+<a:ModificationDate>1760829580</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((-11788,-7949), (-4050,-2447))</a:Rect>
+<a:Rect>((-19290,1741), (-8464,10723))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>16744576</a:LineColor>
 <a:FillColor>16777152</a:FillColor>
@@ -1427,10 +1427,10 @@ LABL 0 Microsoft Sans Serif,8,N</a:FontList>
 </c:Object>
 </o:ProcessSymbol>
 <o:ProcessSymbol Id="o10">
-<a:CreationDate>1760829947</a:CreationDate>
-<a:ModificationDate>1760830045</a:ModificationDate>
+<a:CreationDate>1760829510</a:CreationDate>
+<a:ModificationDate>1760829580</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((6993,-7049), (14249,-1787))</a:Rect>
+<a:Rect>((8971,2521), (18811,10183))</a:Rect>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>16744576</a:LineColor>
 <a:FillColor>16777152</a:FillColor>
@@ -1447,11 +1447,51 @@ LABL 0 Microsoft Sans Serif,8,N</a:FontList>
 <o:Process Ref="o30"/>
 </c:Object>
 </o:ProcessSymbol>
-<o:ResourceSymbol Id="o15">
-<a:CreationDate>1760830088</a:CreationDate>
-<a:ModificationDate>1760830114</a:ModificationDate>
+<o:OrganizationUnitSymbol Id="o13">
+<a:CreationDate>1760829618</a:CreationDate>
+<a:ModificationDate>1760829683</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((-10890,-18120), (-4891,-16861))</a:Rect>
+<a:EmptyAreaSize>(3374, 1875)</a:EmptyAreaSize>
+<a:Rect>((-4115,-9759), (6639,-1586))</a:Rect>
+<a:AutoAdjustToText>0</a:AutoAdjustToText>
+<a:LineColor>12615680</a:LineColor>
+<a:FillColor>16773874</a:FillColor>
+<a:ShadowColor>12632256</a:ShadowColor>
+<a:FontList>STRN 0 Arial,8,N
+DISPNAME 0 Arial,8,N</a:FontList>
+<a:BrushStyle>6</a:BrushStyle>
+<a:GradientFillMode>65</a:GradientFillMode>
+<a:CustomPictureType>1</a:CustomPictureType>
+<a:CustomTextMode>2</a:CustomTextMode>
+<a:CustomPictureID>600858ED-983F-42DC-9228-DB7014108060</a:CustomPictureID>
+<a:GradientEndColor>16308424</a:GradientEndColor>
+<a:ManuallyResized>1</a:ManuallyResized>
+<c:Object>
+<o:OrganizationUnit Ref="o29"/>
+</c:Object>
+</o:OrganizationUnitSymbol>
+<o:ResourceSymbol Id="o24">
+<a:CreationDate>1760829679</a:CreationDate>
+<a:ModificationDate>1760829773</a:ModificationDate>
+<a:IconMode>-1</a:IconMode>
+<a:Rect>((-19473,-13973), (-13474,-12714))</a:Rect>
+<a:LineColor>32896</a:LineColor>
+<a:FillColor>16777215</a:FillColor>
+<a:ShadowColor>12632256</a:ShadowColor>
+<a:FontList>STRN 0 Microsoft Sans Serif,8,N
+DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
+<a:BrushStyle>6</a:BrushStyle>
+<a:GradientFillMode>32</a:GradientFillMode>
+<a:GradientEndColor>7198456</a:GradientEndColor>
+<c:Object>
+<o:Resource Ref="o30"/>
+</c:Object>
+</o:ResourceSymbol>
+<o:ResourceSymbol Id="o21">
+<a:CreationDate>1760829680</a:CreationDate>
+<a:ModificationDate>1760829776</a:ModificationDate>
+<a:IconMode>-1</a:IconMode>
+<a:Rect>((30260,6138), (36259,7397))</a:Rect>
 <a:LineColor>32896</a:LineColor>
 <a:FillColor>16777215</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -1465,10 +1505,10 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 </c:Object>
 </o:ResourceSymbol>
 <o:ResourceSymbol Id="o18">
-<a:CreationDate>1760830089</a:CreationDate>
-<a:ModificationDate>1760830125</a:ModificationDate>
+<a:CreationDate>1760829681</a:CreationDate>
+<a:ModificationDate>1760829770</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((8370,-17880), (14369,-16621))</a:Rect>
+<a:Rect>((-32686,-17675), (-26687,-16416))</a:Rect>
 <a:LineColor>32896</a:LineColor>
 <a:FillColor>16777215</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -1513,12 +1553,12 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 </c:Processes>
 <c:Flows>
 <o:Flow Id="o8">
-<a:ObjectID>517F64F7-601F-4AC7-A5FB-D1A6ECE6424F</a:ObjectID>
-<a:Name>Nhập thông tin loại hàng</a:Name>
-<a:Code>Nhập thông tin loại hàng</a:Code>
-<a:CreationDate>1760829984</a:CreationDate>
+<a:ObjectID>7A75AB50-31F1-40BF-88ED-602073321D17</a:ObjectID>
+<a:Name>Nhập thông tin kho</a:Name>
+<a:Code>Nhập thông tin kho</a:Code>
+<a:CreationDate>1760829567</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830003</a:ModificationDate>
+<a:ModificationDate>1760829587</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:FlowType>Success</a:FlowType>
 <c:Object1>
@@ -1529,12 +1569,12 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 </c:Object2>
 </o:Flow>
 <o:Flow Id="o11">
-<a:ObjectID>D21832C6-FA75-40F1-AC0D-985B879E8223</a:ObjectID>
-<a:Name>Nhập thông tin mặt hàng</a:Name>
-<a:Code>Flow_2</a:Code>
-<a:CreationDate>1760829990</a:CreationDate>
+<a:ObjectID>953D308C-2DEC-415B-A247-F1D7C3DAD94D</a:ObjectID>
+<a:Name>Nhập thông tin địa điểm</a:Name>
+<a:Code>Nhập thông tin địa điểm</a:Code>
+<a:CreationDate>1760829570</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830023</a:ModificationDate>
+<a:ModificationDate>1760829597</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:FlowType>Success</a:FlowType>
 <c:Object1>
@@ -1544,13 +1584,13 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <o:OrganizationUnit Ref="o27"/>
 </c:Object2>
 </o:Flow>
-<o:Flow Id="o13">
-<a:ObjectID>49213C12-FC5E-46D4-B1BA-E6CD1C36F183</a:ObjectID>
-<a:Name>Thông tin tồn kho</a:Name>
-<a:Code>Thông tin tồn kho</a:Code>
-<a:CreationDate>1760830052</a:CreationDate>
+<o:Flow Id="o14">
+<a:ObjectID>8DE54BEC-B332-41DE-B80D-B018C6D328AA</a:ObjectID>
+<a:Name>Thông tin kho</a:Name>
+<a:Code>Thông tin kho</a:Code>
+<a:CreationDate>1760829639</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830056</a:ModificationDate>
+<a:ModificationDate>1760829653</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:FlowType>Success</a:FlowType>
 <c:Object1>
@@ -1560,13 +1600,13 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <o:Process Ref="o30"/>
 </c:Object2>
 </o:Flow>
-<o:Flow Id="o22">
-<a:ObjectID>6E6695DC-FB97-40E4-BDD2-A6909C1F56EA</a:ObjectID>
-<a:Name>Báo cáo tồn kho</a:Name>
-<a:Code>Báo cáo tồn kho</a:Code>
-<a:CreationDate>1760830193</a:CreationDate>
+<o:Flow Id="o16">
+<a:ObjectID>035CEA6A-2E22-4755-8954-700376CC30C4</a:ObjectID>
+<a:Name>Thông tin địa điểm</a:Name>
+<a:Code>Thông tin địa điểm</a:Code>
+<a:CreationDate>1760829641</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830206</a:ModificationDate>
+<a:ModificationDate>1760829664</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:FlowType>Success</a:FlowType>
 <c:Object1>
@@ -1582,9 +1622,9 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:ObjectID>3A45FA85-B69B-4F97-9843-431351AC9C1F</a:ObjectID>
 <a:Name>Nhân viên</a:Name>
 <a:Code>Nhân viên</a:Code>
-<a:CreationDate>1760829906</a:CreationDate>
+<a:CreationDate>1760829499</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830056</a:ModificationDate>
+<a:ModificationDate>1760829597</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:Stereotype>External Entity</a:Stereotype>
 </o:OrganizationUnit>
@@ -1592,9 +1632,9 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:ObjectID>62596815-8880-4A74-B330-B639A5065ACD</a:ObjectID>
 <a:Name>Quản lý</a:Name>
 <a:Code>Quản lý</a:Code>
-<a:CreationDate>1760829907</a:CreationDate>
+<a:CreationDate>1760829618</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830206</a:ModificationDate>
+<a:ModificationDate>1760829664</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:Stereotype>External Entity</a:Stereotype>
 </o:OrganizationUnit>
@@ -1622,15 +1662,26 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:Stereotype>Data Store</a:Stereotype>
 <a:NumberID>4</a:NumberID>
 </o:Resource>
+<o:Resource Id="o32">
+<a:ObjectID>B36DF93A-E589-402F-AEF4-54890E0DB79F</a:ObjectID>
+<a:Name>Nhân viên</a:Name>
+<a:Code>Nhân viên</a:Code>
+<a:CreationDate>1760829681</a:CreationDate>
+<a:Creator>ASUS</a:Creator>
+<a:ModificationDate>1760829744</a:ModificationDate>
+<a:Modifier>ASUS</a:Modifier>
+<a:Stereotype>Data Store</a:Stereotype>
+<a:NumberID>3</a:NumberID>
+</o:Resource>
 </c:Resources>
 <c:ResourceFlows>
-<o:ResourceFlow Id="o16">
-<a:ObjectID>A4D2D1FD-510D-4D70-8A6C-B71CE338E15F</a:ObjectID>
-<a:Name>Thông tin loại hàng</a:Name>
-<a:Code>Thông tin loại hàng</a:Code>
-<a:CreationDate>1760830118</a:CreationDate>
+<o:ResourceFlow Id="o19">
+<a:ObjectID>AA41D155-A632-44E3-8CCD-C20D3E194C5D</a:ObjectID>
+<a:Name>Tra cứu NV phụ trách</a:Name>
+<a:Code>Tra cứu NV phụ trách</a:Code>
+<a:CreationDate>1760829732</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830145</a:ModificationDate>
+<a:ModificationDate>1760829744</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:ReadAccess>1</a:ReadAccess>
 <c:Resource>
@@ -1640,13 +1691,29 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <o:Process Ref="o29"/>
 </c:Process>
 </o:ResourceFlow>
-<o:ResourceFlow Id="o19">
-<a:ObjectID>E6A9186B-D8F2-4D23-A5E1-01ADAB19C23C</a:ObjectID>
-<a:Name>Thông tin mặt hàng</a:Name>
-<a:Code>Thông tin mặt hàng</a:Code>
-<a:CreationDate>1760830120</a:CreationDate>
+<o:ResourceFlow Id="o22">
+<a:ObjectID>5FEBAAEA-BEAA-4652-B1A6-B16F312AC97B</a:ObjectID>
+<a:Name>thông tin địa điểm</a:Name>
+<a:Code>thông tin địa điểm</a:Code>
+<a:CreationDate>1760829780</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
-<a:ModificationDate>1760830160</a:ModificationDate>
+<a:ModificationDate>1760829837</a:ModificationDate>
+<a:Modifier>ASUS</a:Modifier>
+<a:ReadAccess>1</a:ReadAccess>
+<c:Resource>
+<o:Resource Ref="o31"/>
+</c:Resource>
+<c:Process>
+<o:Process Ref="o28"/>
+</c:Process>
+</o:ResourceFlow>
+<o:ResourceFlow Id="o25">
+<a:ObjectID>2ED73537-BA9C-4C67-B40B-397FE71B57A5</a:ObjectID>
+<a:Name>thông tin kho</a:Name>
+<a:Code>thông tin kho</a:Code>
+<a:CreationDate>1760829786</a:CreationDate>
+<a:Creator>ASUS</a:Creator>
+<a:ModificationDate>1760829831</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
 <a:ReadAccess>1</a:ReadAccess>
 <c:Resource>
@@ -1694,7 +1761,7 @@ DISPNAME 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:ObjectID>F7C9A197-6027-40B1-805B-D4864F4AEEAA</a:ObjectID>
 <a:Name>Data Flow Diagram</a:Name>
 <a:Code>DFD</a:Code>
-<a:CreationDate>1760829886</a:CreationDate>
+<a:CreationDate>1760829389</a:CreationDate>
 <a:Creator>ASUS</a:Creator>
 <a:ModificationDate>1284958041</a:ModificationDate>
 <a:Modifier>ASUS</a:Modifier>
