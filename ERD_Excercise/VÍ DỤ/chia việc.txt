@@ -1,0 +1,7 @@
+@All chia bài vẽ ERD mức quan niệm tiếp theo nha
+1.  ERD Đơn đặt hàng: @Bùi Gia Tiến
+2. ERD Phiếu Xuất: @Lê Thị Nhung
+3. ERD Tổng đặt và xuất: Thanh Hương
+4. ERD Quản lý Khách sạn: @Lê Văn Hòa
+
+Deadline: 12/12
