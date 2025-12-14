@@ -5,7 +5,7 @@ GO
 
 CREATE TABLE Tinh (
     MaTinh SMALLINT NOT NULL PRIMARY KEY,
-    TenTinh NVARCHAR(50)
+    TenTinh NVARCHAR(50) NOT NULL,
 );
 CREATE TABLE Xa (
     MaXa SMALLINT NOT NULL PRIMARY KEY,
@@ -18,7 +18,7 @@ CREATE TABLE KhachHang (
     MaXa SMALLINT,
     TenKH NVARCHAR(50),
     SDT CHAR(10),
-    Email NVARCHAR(255),
+    Email VARCHAR(100),
     DiaChi NVARCHAR(255),
     CONSTRAINT FK_KhachHang_Xa FOREIGN KEY (MaXa) REFERENCES Xa(MaXa)
 );
@@ -28,7 +28,7 @@ CREATE TABLE NhaCungCap (
     TenNCC NVARCHAR(100),
     DiaChi NVARCHAR(200),
     SDT CHAR(10),
-    Email NVARCHAR(MAX),
+    Email VARCHAR(100),
     CONSTRAINT FK_NCC_Xa FOREIGN KEY (MaXa) REFERENCES Xa(MaXa)
 );
 CREATE TABLE LoaiSanPham (
@@ -40,7 +40,6 @@ CREATE TABLE SanPham (
     MaLoai CHAR(10),
     TenSP NVARCHAR(100),
     GiaBan DECIMAL(18,2),
-    SoLuongTon INT,
     TrangThai NVARCHAR(50),
     CONSTRAINT FK_SP_LoaiSP FOREIGN KEY (MaLoai) REFERENCES LoaiSanPham(MaLoai)
 );
