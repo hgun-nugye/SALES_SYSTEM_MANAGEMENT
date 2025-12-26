@@ -1,0 +1,49 @@
+﻿@model QuanLyBanHang.Models.LoaiSPDto
+@{
+    ViewBag.Title = "Sửa Loại sản phẩm";
+}
+
+<div class=" container">
+    <h4 class="text-success mb-3">
+        Sửa Thông Tin Loại sản phẩm
+    </h4>
+
+    <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-light">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group mb-3">
+            <label asp-for="MaLoai" class="form-label"></label>
+            <input asp-for="MaLoai" class="form-control" readonly />
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="TenLoai" class="form-label"></label>
+            <input asp-for="TenLoai" class="form-control" />
+            <span asp-validation-for="TenLoai" class="text-danger"></span>
+        </div>
+
+        <!-- Nhóm sản phẩm -->
+        <div class="form-group mb-3">
+            <label asp-for="MaNhom" class="form-label fw-semibold">
+                <i class="fa-solid fa-layer-group me-1"></i>
+            </label>
+
+            <div class="input-group gap-2">
+                <select asp-for="MaNhom" asp-items="ViewBag.MaNhom" class="form-select">
+                    <option value="">-- Chọn nhóm SP --</option>
+                </select>
+            </div>
+            <span asp-validation-for="MaNhom" class="text-danger"></span>
+        </div>              
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-warning text-white me-2">
+                <i class="fa-solid fa-save"></i> Cập nhật
+            </button>
+            <a asp-action="Details" asp-route-id="@Model.MaLoai" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+
+    
+</div>

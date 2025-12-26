@@ -1,0 +1,73 @@
+﻿@model QuanLyBanHang.Models.KhachHangDetailView
+
+@{
+    ViewBag.Title = "Xóa Khách hàng";
+}
+
+<div class="container">
+    <h4 class="text-danger mb-3">
+        Xóa Khách hàng
+    </h4>
+
+    <div class="alert alert-warning shadow-sm">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Bạn có chắc muốn xóa Khách hàng <strong>@Model.TenKH</strong> không?
+    </div>
+
+    <div class="border p-4 rounded shadow-sm bg-light">
+        <div class="row">
+            <!-- Ảnh minh họa -->
+            <div class="col-md-5 text-center">
+                <img src="@(string.IsNullOrEmpty(Model.AnhKH) ? Url.Content("~/images/default-user.png") : @Url.Content("~/images/customers/" + Model.AnhKH))" class="img-fluid rounded"
+
+            </div>
+
+            <!-- Thông tin sản phẩm -->
+            <div class="col-md-7">
+                <div class="p-3">
+                    <h4 class="text-primary mb-3">@Model.TenKH</h4>
+                    <p><strong>@Html.DisplayNameFor(m => m.MaKH):</strong> @Model.MaKH</p>
+
+                    <div class="row mt-3">
+                        <p><strong>@Html.DisplayNameFor(m => m.DienThoaiKH):</strong> @Model.DienThoaiKH</p>
+                        <p><strong>@Html.DisplayNameFor(m => m.EmailKH):</strong> @Model.EmailKH</p>
+                        <p><strong>@Html.DisplayNameFor(m => m.DiaChiKH):</strong> @Model.DiaChiKH, @Model.TenXa, @Model.TenTinh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteForm" asp-action="Delete" method="post" class="mt-4">
+        <input type="hidden" asp-for="MaKH" />
+        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+            <i class="fa-solid fa-trash-can me-2"></i> Xóa
+        </button>
+        <a asp-action="Details" asp-route-id="@Model.MaKH" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại
+        </a>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete() {
+            Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: 'Bạn có chắc chắn muốn xóa khách hàng này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+        }
+    </script>
+}

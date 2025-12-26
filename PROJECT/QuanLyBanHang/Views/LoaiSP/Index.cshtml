@@ -1,0 +1,144 @@
+﻿@model IEnumerable<QuanLyBanHang.Models.LoaiSPDto>
+
+@{
+    ViewBag.Title = "Quản lý Loại sản phẩm";
+}
+
+<style>
+    .search-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+    }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .search-wrapper input {
+            padding-left: 38px !important;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+    .table {
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f5faff;
+        transition: 0.2s;
+    }
+</style>
+
+<div class="container">
+    
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <h4 class="mb-5 text-success">
+            Danh sách Loại sản phẩm
+        </h4>
+        <a href="@Url.Action("Index", "NhomSP")" class="btn btn-success mb-5">
+            <i class="fa-solid fa-list-check"></i> Quản lý Nhóm sản phẩm
+        </a>
+    </div>
+
+    <!--  Form -->
+    <form id="Form" method="get" class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
+        <div class="search-wrapper flex-grow-1">
+            <i class="fa fa-search"></i>
+            <input id="searchBox" type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Tìm tên loại sản phẩm">
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2">                
+                @Html.DropDownList(
+                "group",
+                                (SelectList)ViewBag.MaNhom,
+                                "-- Nhóm SP --",
+                                new { @class = "form-select", style = "width:150px;", id = "groupSelect" }
+                                )
+
+            </div>
+           
+            <button type="button" id="btnClear" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i>Reset</button>
+            <a href="@Url.Action("Create", "LoaiSP")" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i> Add</a>
+        </div>
+    </form>
+
+
+    <table class="table  table-hover align-middle shadow-sm ">
+        <thead class="table-success">
+            <tr>
+                <th class="text-center">Mã Loại sản phẩm</th>
+                <th>Tên Loại sản phẩm</th>
+                <th class="text-center">Mã Nhóm sản phẩm</th>
+                <th>Tên Nhóm sản phẩm</th>
+            </tr>
+        </thead>
+        <tbody class="text-start">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr class="clickable-row" data-href="@Url.Action("Details", "LoaiSP", new { id = item.MaLoai })">
+
+                        <td class="text-center">@item.MaLoai</td>
+                        <td>@item.TenLoai</td>
+                        <td class="text-center">@item.MaNhom</td>
+                        <td>@item.TenNhom</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted fst-italic">Không có loại sản phẩm nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+                // debounce function
+            function debounce(fn, delay) {
+                let timer = null;
+                return function() {
+                    const context = this, args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn.apply(context, args), delay);
+                };
+            }
+            // khi thay đổi  -> submit form
+        $("#searchBox").on("change", debounce(function(){
+            $("#Form").submit();
+        }, 400));
+
+         $("#groupSelect").on("change", function(){
+            $("#Form").submit();
+        });
+
+        // clear 
+        $("#btnClear").on("click", function(){
+            $("#searchBox").val("");
+            $("#groupSelect").val("");
+            $("#Form").submit();
+        });
+        </script>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".clickable-row").forEach(row => {
+                row.addEventListener("click", function () {
+                    window.location = this.dataset.href;
+                });
+            });
+        });
+    </script>
+}

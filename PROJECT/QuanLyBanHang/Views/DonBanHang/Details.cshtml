@@ -1,0 +1,115 @@
+﻿@model List<QuanLyBanHang.Models.DonBanHangDetail>
+
+@{
+    ViewBag.Title = "Chi tiết Đơn bán hàng";
+
+    // Lấy dòng đầu tiên để hiển thị thông tin chung
+    var don = Model.FirstOrDefault();
+    bool isCustomer = ViewBag.IsCustomer == true;
+}
+
+<div class=" container">
+    <h4 class="mb-3 text-success">
+        @(isCustomer ? "Chi tiết đơn hàng" : "Chi tiết Đơn bán hàng") - Đơn @don?.MaDBH
+    </h4>
+
+    @if (don != null)
+    { 
+        <!-- Thông tin chung của đơn -->
+            <div class="card shadow-sm p-4">
+                <dl class="row">
+                    <dt class="col-sm-3">Ngày bán hàng:</dt>
+                    <dd class="col-sm-9">@don.NgayBH.ToString("dd/MM/yyyy")</dd>
+                    <dt class="col-sm-3">Khách hàng:</dt>
+                    <dd class="col-sm-9">@don.TenKH</dd>
+                    <dt class="col-sm-3">Trạng thái:</dt>
+                    <dd class="col-sm-9">@don.TenTTBH</dd>
+                    
+                <dt class="col-sm-3" >Địa chỉ giao hàng:</dt>
+                <dd class="col-sm-9">@don.DiaChiDBH, @don.TenXa, @don.TenTinh</dd>
+                </dl>
+            </div>
+
+        <h4 class="text-success mt-4">
+            <i class="fa-solid fa-boxes-stacked"></i> Danh sách sản phẩm bán
+        </h4>
+
+        <table class="table mt-4">
+            <thead class="table-success">
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th class="text-center">Số lượng bán</th>
+                    <th class="text-end">Đơn giá bán</th>
+                    <th class="text-end">Thành tiền</th>
+                    @if (!isCustomer) { <th class="text-center">Xóa sản phẩm</th>}
+                </tr>
+                </thead>
+            <tbody>
+                @foreach (var ct in Model)
+                {
+                    <tr>
+                        <td>@ct.TenSP</td>
+                        <td class="text-center">@ct.SLB</td>
+
+                        <td class="text-end">
+                            @(ct.DGB?.ToString("#,##0.################", new System.Globalization.CultureInfo("vi-VN"))) ₫
+                        </td>
+
+                        <td class="text-end">
+                            @(((ct.SLB ?? 0) * (ct.DGB ?? 0))
+                                                .ToString("#,##0.################", new System.Globalization.CultureInfo("vi-VN"))) ₫
+                        </td>
+
+                        <td class="text-center">
+                            @if (!isCustomer)
+                            {
+                                <a href="@Url.Action("DeleteDetail", "DonBanHang",
+                                       new { maDBH = ct.MaDBH, maSP = ct.MaSP })"
+                                   class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                        }
+            </tbody>
+
+                <tfoot>
+                    <tr class="table-success fw-bold">
+                        <td colspan="3" class="text-end">Tổng cộng:</td>
+                        <td colspan="2" class="text-end">
+                            @(
+                                                Model.Sum(x => (x.SLB ?? 0) * (x.DGB ?? 0))
+                                                .ToString("#,##0.################", new System.Globalization.CultureInfo("vi-VN"))
+                                                ) ₫
+                        </td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            Không tìm thấy đơn bán hàng cần xem chi tiết.
+        </div>
+    }
+
+    <div class="mt-4">
+        @if (don != null && !isCustomer)
+        {
+            <a href="@Url.Action("Edit", "DonBanHang", new { id = don.MaDBH })" class="btn btn-warning text-white me-2">
+                <i class="fa-solid fa-pen-to-square"></i> Sửa
+            </a>
+
+            <a class="btn btn-danger me-2 text-white" href="@Url.Action("Delete", "DonBanHang", new { id = don.MaDBH })">
+                <i class="fa-solid fa-trash"></i> Xóa
+            </a>
+        }
+        <a asp-action="Index" asp-route-id="@don.MaDBH" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+</div>
