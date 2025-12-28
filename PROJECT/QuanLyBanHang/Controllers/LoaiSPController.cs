@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class LoaiSPController : Controller
 	{
 		private readonly LoaiSPService _loaiService;
@@ -108,6 +111,7 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			var obj = await _loaiService.GetById(id);
@@ -120,6 +124,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			try

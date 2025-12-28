@@ -1,108 +1,120 @@
 ﻿@model QuanLyBanHang.Models.NhaCCDetailView
 @{
-    ViewBag.Title = "Sửa Nhà Cung Cấp";
+    ViewBag.Title = "Chỉnh sửa nhà cung cấp";
 }
 
 <div class="container">
-    <h4 class="text-success mb-3">
-       Sửa Thông Tin Nhà Cung Cấp
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "NhaCC")" class="text-success text-decoration-none">Nhà Cung Cấp</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "NhaCC", new { id = Model.MaNCC })" class="text-success text-decoration-none">@Model.MaNCC</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+        </ol>
+    </nav>
 
-    <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-light">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <form asp-action="Edit" method="post">
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger shadow-sm mb-4" })
+        <input type="hidden" asp-for="MaNCC" />
 
-        <div class="form-group mb-3">
-            <label asp-for="MaNCC" class="form-label"></label>
-            <input asp-for="MaNCC" class="form-control" readonly />
-        </div>
-        <div class="form-group mb-3">
-            <label asp-for="TenNCC" class="form-label"></label>
-            <input asp-for="TenNCC" class="form-control" />
-            <span asp-validation-for="TenNCC" class="text-danger"></span>
-        </div>
-       <div class="row">
-            <div class="form-group mb-3 col-md-6">
-                <label asp-for="DienThoaiNCC" class="form-label"></label>
-                <input asp-for="DienThoaiNCC" class="form-control" />
-                <span asp-validation-for="DienThoaiNCC" class="text-danger"></span>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="md-card">
+                    <h5 class="fw-bold mb-4">Cập nhật hồ sơ đối tác</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Tên doanh nghiệp</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-pen-to-square text-muted"></i></span>
+                            <input asp-for="TenNCC" class="form-control border-0 bg-transparent" />
+                        </div>
+                        <span asp-validation-for="TenNCC" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small text-uppercase fw-bold text-muted">Số điện thoại</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-phone text-muted"></i></span>
+                                <input asp-for="DienThoaiNCC" class="form-control border-0 bg-transparent" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-uppercase fw-bold text-muted">Email giao dịch</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+                                <input asp-for="EmailNCC" type="email" class="form-control border-0 bg-transparent" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mb-4 mt-5">Địa chỉ văn phòng</h5>
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Địa chỉ chi tiết</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-map-location-dot text-muted"></i></span>
+                            <input asp-for="DiaChiNCC" class="form-control border-0 bg-transparent" />
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label small text-uppercase fw-bold text-muted">Tỉnh / Thành phố</label>
+                            <select id="MaTinh" name="maTinh" asp-items="@ViewBag.Tinh" class="form-select border rounded-3 bg-light p-3">
+                                <option value="">@Model.TenTinh</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-uppercase fw-bold text-muted">Xã / Phường</label>
+                            <select id="MaXa" asp-for="MaXa" asp-items="@ViewBag.Xa" class="form-select border rounded-3 bg-light p-3">
+                                <option value="">@Model.TenXa</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group mb-3 col-md-6">
-                <label asp-for="EmailNCC" class="form-label"></label>
-                <input asp-for="EmailNCC" class="form-control" />
-                <span asp-validation-for="EmailNCC" class="text-danger"></span>
+
+            <div class="col-lg-4">
+                <div class="md-card bg-light border-0 mb-4 text-center">
+                    <h6 class="fw-bold text-muted text-uppercase mb-3 small">Mã nhà cung cấp</h6>
+                    <div class="h4 fw-bold font-monospace">#@Model.MaNCC</div>
+                </div>
+
+                <div class="md-card">
+                    <h6 class="fw-bold text-muted text-uppercase mb-4 small">Lưu thay đổi</h6>
+                    <div class="d-grid gap-3">
+                        <button type="submit" class="btn btn-success py-2 fw-bold">
+                            <i class="fa-solid fa-save me-2"></i>Lưu thông tin
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaNCC" class="btn btn-light border py-2">Hủy bỏ</a>
+                    </div>
+                </div>
             </div>
-       </div>
-        
-        <div class="form-group mb-3">
-            <label asp-for="DiaChiNCC" class="form-label"></label>
-            <input asp-for="DiaChiNCC" class="form-control mb-2" />
-            <span asp-validation-for="DiaChiNCC" class="text-danger"></span>
         </div>
-
-        <div class="form-group mb-3">
-            <label class="form-label">Tỉnh</label>
-            <select id="MaTinh" name="maTinh" class="form-control" asp-items="@ViewBag.Tinh">
-                <option value="">@Model.TenTinh</option>
-            </select>
-        </div>
-
-        <div class="form-group mb-3">
-            <label asp-for="MaXa" class="form-label"></label>
-            <select id="MaXa" asp-for="MaXa" class="form-control" asp-items="@ViewBag.Xa">
-                <option value="">@Model.TenXa</option>
-            </select>
-            <span asp-validation-for="MaXa" class="text-danger"></span>
-        </div>
-
-        <div class="mt-4">
-            <button type="submit" class="btn btn-warning text-white">
-                <i class="fa-solid fa-save"></i> Cập nhật
-            </button>
-            <a asp-action="Details" asp-route-id="@Model.MaNCC" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left"></i> Quay lại
-            </a>
-        </div>
-
     </form>
-
-    
 </div>
 
-
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
         $(function () {
-
-            // Khi chọn Tỉnh → load Xã
             $('#MaTinh').change(function () {
                 var maTinh = $(this).val();
-
-                $('#MaXa').html('<option value="">-- Chọn Xã --</option>');
-
                 if (maTinh) {
+                    $('#MaXa').html('<option value="">Đang tải...</option>');
                     $.getJSON('/KhachHang/GetXaByTinh', { maTinh: maTinh }, function (data) {
-
-                        var options = '<option value="">-- Chọn Xã --</option>';
-
+                        var options = '<option value="">Chọn Xã/Phường</option>';
                         $.each(data, function (i, xa) {
                             options += `<option value="${xa.maXa}">${xa.tenXa}</option>`;
                         });
-
                         $('#MaXa').html(options);
                     });
                 }
             });
 
-            // Khi load trang → Tự chọn lại Xã đúng với Model.MaXa
             var selectedXa = "@Model.MaXa";
             if ($('#MaTinh').val()) {
                 $('#MaTinh').trigger('change');
-
-                setTimeout(() => {
-                    $('#MaXa').val(selectedXa);
-                }, 300);
+                setTimeout(() => { $('#MaXa').val(selectedXa); }, 500);
             }
         });
     </script>

@@ -72,8 +72,6 @@ namespace QuanLyBanHang.Services
 			{
 				new SqlParameter("@NgayMH", model.NgayMH),
 				new SqlParameter("@MaNCC", model.MaNCC),
-				new SqlParameter("@MaNV", model.MaNV),
-				new SqlParameter("@MaTTMH", (object?)model.MaTTMH ?? "CHO"),
 				new SqlParameter("@ChiTiet", table)
 				{
 					SqlDbType = SqlDbType.Structured,
@@ -97,9 +95,7 @@ namespace QuanLyBanHang.Services
 						"EXEC DonMuaHang_Update @MaDMH, @NgayMH, @MaNCC, @MaNV, @MaTTMH",
 						new SqlParameter("@MaDMH", model.MaDMH),
 						new SqlParameter("@NgayMH", model.NgayMH),
-						new SqlParameter("@MaNCC", model.MaNCC ?? (object)DBNull.Value),
-						new SqlParameter("@MaNV", model.MaNV ?? (object)DBNull.Value),
-						new SqlParameter("@MaTTMH", model.MaTTMH)
+						new SqlParameter("@MaNCC", model.MaNCC ?? (object)DBNull.Value)
 					);
 
 					// 2. Xóa sạch chi tiết cũ (Sử dụng Procedure đã sửa ở Bước 1)
@@ -152,7 +148,7 @@ namespace QuanLyBanHang.Services
 			);
 		}
 
-		public async Task<List<DonMuaHangDetail>> Search(string? search, int? month, int? year, string? status)
+		public async Task<List<DonMuaHangDetail>> Search(string? search, int? month, int? year)
 		{
 			var parameters = new[]
 			{

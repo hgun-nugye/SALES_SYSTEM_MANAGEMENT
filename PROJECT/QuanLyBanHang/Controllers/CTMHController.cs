@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class CTMHController : Controller
 	{
 		private readonly CTMHService _service;
@@ -70,6 +73,7 @@ namespace QuanLyBanHang.Controllers
 			return View(model);
 		}
 
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string maDMH, string maSP)
 		{
 			if (string.IsNullOrEmpty(maDMH) || string.IsNullOrEmpty(maSP))
@@ -83,6 +87,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string maDMH, string maSP)
 		{
 			try

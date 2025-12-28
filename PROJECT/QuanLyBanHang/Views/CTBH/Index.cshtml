@@ -1,62 +1,85 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.CTBHDetailDto>
 
 @{
-    ViewBag.Title = "Chi tiết bán hàng";
+    ViewBag.Title = "Chi tiết hạng mục bán hàng";
+    var maDBH = ViewBag.MaDBH;
 }
 
 <div class="container">
-    <h4 class="mb-3 text-success">
-        <i class="fa-solid fa-list"></i> Chi tiết bán hàng
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "DonBanHang")" class="text-success text-decoration-none">Đơn Bán Hàng</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "DonBanHang", new { id = maDBH })" class="text-success text-decoration-none">@maDBH</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chi tiết Hạng mục</li>
+        </ol>
+    </nav>
 
-    <div class="mb-3">
-        <a asp-action="Create" asp-route-maDBH="@ViewBag.MaDBH" class="btn btn-success">
-            <i class="fa-solid fa-plus"></i> Thêm chi tiết
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-success mb-1">Thành phần đơn hàng</h4>
+            <p class="text-muted small mb-0">Quản lý các sản phẩm trong đơn hàng #@maDBH</p>
+        </div>
+        <a asp-action="Create" asp-route-maDBH="@maDBH" class="btn btn-success shadow-sm">
+            <i class="fa-solid fa-plus-circle me-1"></i>Thêm sản phẩm mới
         </a>
     </div>
 
-    <table class="table  table-hover align-middle text-center shadow-sm">
-        <thead class="table-light">
-            <tr>
-                <th><i class="fa-solid fa-hashtag"></i> Mã đơn</th>
-                <th><i class="fa-solid fa-box"></i> Tên SP</th>
-                <th><i class="fa-solid fa-sort-numeric-up"></i> Số lượng</th>
-                <th><i class="fa-solid fa-money-bill"></i> Đơn giá</th>
-                <th><i class="fa-solid fa-coins"></i> Thành tiền</th>
-                <th><i class="fa-solid fa-gear"></i> Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Sản Phẩm</th>
+                    <th class="text-center">Số Lượng</th>
+                    <th class="text-end">Đơn Giá</th>
+                    <th class="text-end">Thành Tiền</th>
+                    <th class="text-end pe-4">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-dark">@item.TenSP</div>
+                                <div class="small text-muted">Mã SP: @item.MaSP</div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badged bg-light text-dark border">@item.SLB</span>
+                            </td>
+                            <td class="text-end font-monospace">@item.DGB.ToString("N0") <small>₫</small></td>
+                            <td class="text-end fw-bold text-success font-monospace">@((item.SLB * item.DGB).ToString("N0")) <small>₫</small></td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-maDBH="@item.MaDBH" asp-route-maSP="@item.MaSP" class="btn btn-sm btn-light text-warning" title="Sửa">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-maDBH="@item.MaDBH" asp-route-maSP="@item.MaSP" class="btn btn-sm btn-light text-danger" title="Xóa">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@item.MaDBH</td>
-                        <td>@item.TenSP</td>
-                        <td>@item.SLB</td>
-                        <td>@item.DGB.ToString("N0")</td>
-                        <td>@((item.SLB * item.DGB).ToString("N0"))</td>
-                        <td class="d-flex justify-content-center gap-1">
-                            <a asp-action="Details" asp-route-maDBH="@item.MaDBH" asp-route-maSP="@item.MaSP" class="btn btn-info btn-sm text-white">
-                                <i class="fa-solid fa-eye"></i> Xem
-                            </a>
-                            <a asp-action="Edit" asp-route-maDBH="@item.MaDBH" asp-route-maSP="@item.MaSP" class="btn btn-warning btn-sm text-white">
-                                <i class="fa-solid fa-pen-to-square"></i> Sửa
-                            </a>
-                            <a asp-action="Delete" asp-route-maDBH="@item.MaDBH" asp-route-maSP="@item.MaSP" class="btn btn-danger btn-sm">
-                                <i class="fa-solid fa-trash"></i> Xóa
-                            </a>
+                        <td colspan="5" class="py-5 text-center text-muted">
+                            <i class="fa-solid fa-box-open fs-1 d-block mb-3 opacity-25"></i>
+                            Đơn hàng hiện đang trống hạng mục.
                         </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-muted fst-italic">Chưa có chi tiết sản phẩm nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Details", "DonBanHang", new { id = maDBH })" class="btn btn-light border py-2 px-4 shadow-sm">
+            <i class="fa-solid fa-arrow-left me-2"></i>Về chi tiết đơn hàng
+        </a>
+    </div>
 </div>

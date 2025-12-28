@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class DonMuaHangController : Controller
 	{
 		private readonly DonMuaHangService _dmhService;
@@ -28,13 +31,12 @@ namespace QuanLyBanHang.Controllers
 			_context = context;
 		}
 
-	public async Task<IActionResult> Index(string? search, int? month, int? year, string? MaTTMH)
+	public async Task<IActionResult> Index(string? search, int? month, int? year)
 	{
 		ViewBag.Search = search;
 		ViewBag.Month = month;
 		ViewBag.Year = year;
-		ViewBag.MaTTMH = MaTTMH;		
-		var model = await _dmhService.Search(search, month, year, MaTTMH);
+		var model = await _dmhService.Search(search, month, year);
 
 		return View(model);
 	}
@@ -44,6 +46,8 @@ namespace QuanLyBanHang.Controllers
 			if (string.IsNullOrEmpty(id)) return NotFound();
 
 			var result = await _dmhService.GetByID(id);
+			if (result == null || !result.Any()) return NotFound();
+
 			return View(result);
 		}
 
@@ -142,8 +146,6 @@ namespace QuanLyBanHang.Controllers
 				MaDMH = header.MaDMH,
 				NgayMH = header.NgayMH,
 				MaNCC = header.MaNCC,
-				MaNV = header.MaNV,
-				MaTTMH = header.MaTTMH ?? "CHO",
 				ChiTiet = details
 			};
 
@@ -209,6 +211,7 @@ namespace QuanLyBanHang.Controllers
 			return View(model);
 		}
 
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			if (string.IsNullOrEmpty(id)) return NotFound();
@@ -221,6 +224,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			try
@@ -238,6 +242,7 @@ namespace QuanLyBanHang.Controllers
 
 
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteDetail(string MaDMH, string maSP)
 		{
 			var model = await _dmhService.GetDetail(MaDMH, maSP);
@@ -247,6 +252,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteDetailConfirmed(string MaDMH, string maSP)
 		{
 			try

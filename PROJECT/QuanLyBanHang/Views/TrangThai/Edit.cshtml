@@ -1,69 +1,77 @@
 @model QuanLyBanHang.Models.TrangThai
 @{
-    ViewBag.Title = "Sửa Trạng thái";
+    ViewBag.Title = "Cập nhật tham số trạng thái";
 }
 
 <div class="container">
-    <h4 class="text-success mb-3">
-        Sửa Trạng thái
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "TrangThai")" class="text-success text-decoration-none">Trạng Thái</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "TrangThai", new { id = Model.MaTT })" class="text-success text-decoration-none">#@Model.MaTT</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+        </ol>
+    </nav>
 
-    <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-light">
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong><i class="fa-solid fa-triangle-exclamation"></i> Lỗi xác thực:</strong>
-                <ul class="mb-0 mt-2">
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card">
+                <div class="text-center mb-4">
+                    <div class="p-3 bg-warning-subtle rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-pen-nib text-warning fs-2"></i>
+                    </div>
+                    <h4 class="fw-bold">Hiệu chỉnh trạng thái</h4>
+                    <p class="text-muted small">Cập nhật tên gọi hiển thị của trạng thái này trong toàn bộ hệ thống.</p>
+                </div>
+
+                <form asp-action="Edit" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    @if (!ViewData.ModelState.IsValid)
                     {
-                        <li>@error.ErrorMessage</li>
+                        <div class="alert alert-danger shadow-sm mb-4 small">
+                            <ul class="mb-0">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
                     }
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong><i class="fa-solid fa-exclamation-circle"></i> Lỗi:</strong> @TempData["ErrorMessage"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
 
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label asp-for="MaTT" class="form-label"></label>
-                <input asp-for="MaTT" class="form-control" readonly />
-            </div>
-            <div class="col-md-6">
-                <label asp-for="TenTT" class="form-label required-field">
-                    <i class="fa-solid fa-tag"></i>
-                    @Html.DisplayNameFor(m => m.TenTT)
-                </label>
-                <input asp-for="TenTT" class="form-control" placeholder="Nhập tên trạng thái" />
-                <span asp-validation-for="TenTT" class="text-danger small mt-1 d-block"></span>
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Mã hệ thống (Read-only)</label>
+                        <div class="p-2 px-3 bg-light rounded-3 font-monospace fw-bold text-muted border">
+                            <i class="fa-solid fa-lock me-2"></i>@Model.MaTT
+                            <input type="hidden" asp-for="MaTT" />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Tên trạng thái mới</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-signature text-muted"></i></span>
+                            <input asp-for="TenTT" class="form-control border-0 bg-transparent py-2" />
+                        </div>
+                        <span asp-validation-for="TenTT" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <hr class="opacity-10 my-4">
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success py-2 fw-bold shadow-sm">
+                            <i class="fa-solid fa-save me-2"></i>Lưu các thay đổi
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaTT" class="btn btn-light border py-2 text-muted fw-bold">
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="mt-4 d-flex gap-2 justify-content-end">
-            <a asp-action="Details" asp-route-id="@Model.MaTT" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left"></i> Quay lại
-            </a>
-            <button type="submit" class="btn btn-warning text-white">
-                <i class="fa-solid fa-save"></i> Cập nhật
-            </button>
-        </div>
-    </form>
+    </div>
 </div>
-
-<style>
-    .required-field::after {
-        content: " *";
-        color: #dc3545;
-    }
-</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-

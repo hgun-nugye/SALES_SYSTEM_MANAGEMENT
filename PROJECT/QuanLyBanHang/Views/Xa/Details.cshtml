@@ -1,28 +1,58 @@
 ﻿@model QuanLyBanHang.Models.Xa
 @{
-    ViewBag.Title = "Chi tiết Xã";
+    ViewBag.Title = "Thông tin xã / phường";
 }
 
 <div class="container">
-    <h4 class="text-success mb-3">
-        Chi tiết Xã
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Xa")" class="text-success text-decoration-none">Xã / Phường</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.MaXa</li>
+        </ol>
+    </nav>
 
-    <div class="border p-4 rounded shadow-sm bg-light">
-            <p><strong>@Html.DisplayNameFor(m => m.MaXa):</strong> @Model.MaXa</p>
-            <p><strong>@Html.DisplayNameFor(m => m.TenXa):</strong> @Model.TenXa</p>
-            <p><strong>Tỉnh:</strong> @Model.TenTinh</p>
-    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card">
+                <div class="text-center mb-4">
+                    <div class="p-3 bg-success-subtle rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-location-dot text-success fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">@Model.TenXa</h4>
+                    <span class="badged bg-light text-muted border px-3 py-2 rounded-pill small font-monospace">
+                        Mã vùng: #@Model.MaXa
+                    </span>
+                </div>
 
-    <div class="mt-4">
-        <a class="btn btn-warning text-white me-2" href="@Url.Action("Edit", "Xa", new { id = Model.MaXa })">
-            <i class="fa-solid fa-pen-to-square"></i> Sửa
-        </a>
-        <a class="btn btn-danger me-2 text-white" href="@Url.Action("Delete", "Xa", new { id = Model.MaXa })">
-            <i class="fa-solid fa-trash"></i> Xóa
-        </a>
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
+                <div class="p-4 bg-light rounded-4 mb-4">
+                    <label class="small text-muted text-uppercase fw-bold d-block mb-2">Đơn vị hành chính cấp trên</label>
+                    <div class="h5 fw-bold text-dark mb-0">
+                        <i class="fa-solid fa-city me-2 text-success"></i>@Model.TenTinh
+                    </div>
+                </div>
+
+                <hr class="opacity-10 my-4">
+
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Edit", "Xa", new { id = Model.MaXa })" class="btn btn-success py-2 fw-bold shadow-sm">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Chỉnh sửa địa danh
+                    </a>
+                    @if (Context.Session.GetString("IsAdmin") == "true")
+                    {
+                        <a href="@Url.Action("Delete", "Xa", new { id = Model.MaXa })" class="btn btn-outline-danger py-2 fw-bold">
+                            <i class="fa-solid fa-trash me-2"></i>Xóa địa danh này
+                        </a>
+                    }
+                    <a asp-action="Index" class="btn btn-light border py-2 text-muted fw-bold">
+                        Quay lại danh sách
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <p class="small text-muted mb-0">Hệ thống quản lý địa giới hành chính nội bộ.</p>
+            </div>
+        </div>
     </div>
 </div>

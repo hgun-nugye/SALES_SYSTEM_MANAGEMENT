@@ -1,33 +1,59 @@
 @model QuanLyBanHang.Models.TrangThai
 
 @{
-    ViewBag.Title = "Xóa Trạng thái";
+    ViewBag.Title = "Xác nhận xóa trạng thái";
 }
 
 <div class="container">
-    <h4 class="text-danger mb-3">
-        Xóa Trạng thái
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "TrangThai")" class="text-success text-decoration-none">Trạng Thái</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Xác nhận xóa</li>
+        </ol>
+    </nav>
 
-    <div class="alert alert-warning shadow-sm">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        Bạn có chắc muốn xóa <strong>@Model.TenTT</strong> không?
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card border-0 shadow-lg text-center">
+                <div class="p-3 bg-danger-subtle rounded-circle d-inline-block mb-3">
+                    <i class="fa-solid fa-ban text-danger fs-1"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Gỡ bỏ trạng thái?</h4>
+                <p class="text-muted">Bạn đang thực hiện xóa trạng thái <strong>@Model.TenTT</strong>. Việc này có thể gây lỗi cho các dữ liệu đang sử dụng trạng thái này.</p>
+
+                <div class="my-4 p-4 bg-light rounded-4 text-start small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Mã trạng thái:</span>
+                        <span class="font-monospace fw-bold">#@Model.MaTT</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Tên hiển thị:</span>
+                        <span class="fw-bold fs-6">@Model.TenTT</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning border-0 small text-start mb-4 text-center">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <strong>Cảnh báo:</strong> Nếu có đơn hàng hoặc sản phẩm đang ở trạng thái này, hành động xóa sẽ bị từ chối bởi hệ thống.
+                </div>
+
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MaTT" />
+                    
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-danger py-3 fw-bold" onclick="confirmDelete()">
+                            <i class="fa-solid fa-trash-can me-2"></i>Xác nhận xóa bỏ
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaTT" class="btn btn-light border py-2 text-muted fw-bold">
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="border p-4 rounded shadow-sm bg-light">
-        <p><strong>@Html.DisplayNameFor(m => m.MaTT):</strong> @Model.MaTT</p>
-        <p><strong>@Html.DisplayNameFor(m => m.TenTT):</strong> @Model.TenTT</p>
-    </div>
-
-    <form id="deleteForm" asp-action="Delete" method="post" class="mt-4">
-        <input type="hidden" asp-for="MaTT" />
-        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-            <i class="fa-solid fa-trash-can me-2"></i> Xóa
-        </button>
-        <a asp-action="Details" asp-route-id="@Model.MaTT" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-    </form>
 </div>
 
 @section Scripts {
@@ -35,14 +61,14 @@
     <script>
         function confirmDelete() {
             Swal.fire({
-                title: 'Xác nhận xóa?',
-                text: 'Bạn có chắc chắn muốn xóa trạng thái này?',
+                title: 'Xóa vĩnh viễn?',
+                text: 'Dữ liệu tham số này sẽ bị gỡ khỏi hệ thống điều hướng.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Xóa',
+                confirmButtonText: 'Đồng ý xóa',
                 cancelButtonText: 'Hủy',
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6'
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('deleteForm').submit();
@@ -51,4 +77,3 @@
         }
     </script>
 }
-

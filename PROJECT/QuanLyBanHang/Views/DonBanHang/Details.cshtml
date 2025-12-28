@@ -2,114 +2,145 @@
 
 @{
     ViewBag.Title = "Chi tiết Đơn bán hàng";
-
-    // Lấy dòng đầu tiên để hiển thị thông tin chung
     var don = Model.FirstOrDefault();
     bool isCustomer = ViewBag.IsCustomer == true;
 }
 
-<div class=" container">
-    <h4 class="mb-3 text-success">
-        @(isCustomer ? "Chi tiết đơn hàng" : "Chi tiết Đơn bán hàng") - Đơn @don?.MaDBH
-    </h4>
+<div class="container">
+    <!-- Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "DonBanHang")" class="text-success text-decoration-none">Đơn Bán Hàng</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@don?.MaDBH</li>
+        </ol>
+    </nav>
 
     @if (don != null)
-    { 
-        <!-- Thông tin chung của đơn -->
-            <div class="card shadow-sm p-4">
-                <dl class="row">
-                    <dt class="col-sm-3">Ngày bán hàng:</dt>
-                    <dd class="col-sm-9">@don.NgayBH.ToString("dd/MM/yyyy")</dd>
-                    <dt class="col-sm-3">Khách hàng:</dt>
-                    <dd class="col-sm-9">@don.TenKH</dd>
-                    <dt class="col-sm-3">Trạng thái:</dt>
-                    <dd class="col-sm-9">@don.TenTTBH</dd>
-                    
-                <dt class="col-sm-3" >Địa chỉ giao hàng:</dt>
-                <dd class="col-sm-9">@don.DiaChiDBH, @don.TenXa, @don.TenTinh</dd>
-                </dl>
+    {
+        <div class="row g-4">
+            <!-- Order Info Header -->
+            <div class="col-12">
+                <div class="md-card bg-success text-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="small text-uppercase opacity-75 fw-bold mb-1">Mã đơn hàng</div>
+                            <h2 class="fw-bold mb-0">#@don.MaDBH</h2>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <div class="small text-uppercase opacity-75 fw-bold mb-1">Tổng giá trị đơn hàng</div>
+                            <h2 class="fw-bold mb-0">
+                                @Model.Sum(x => (x.SLB ?? 0) * (x.DGB ?? 0)).ToString("N0") <small class="fs-6">₫</small>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-        <h4 class="text-success mt-4">
-            <i class="fa-solid fa-boxes-stacked"></i> Danh sách sản phẩm bán
-        </h4>
+            <!-- Detailed Info -->
+            <div class="col-lg-4">
+                <div class="md-card h-100">
+                    <h5 class="fw-bold mb-4">Thông Tin Khách Hàng</h5>
+                    
+                    <div class="mb-4">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Họ và tên</label>
+                        <div class="h5 fw-bold text-dark">@don.TenKH</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Mã định danh</label>
+                        <div class="font-monospace text-dark">@don.MaKH</div>
+                    </div>
 
-        <table class="table mt-4">
-            <thead class="table-success">
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <th class="text-center">Số lượng bán</th>
-                    <th class="text-end">Đơn giá bán</th>
-                    <th class="text-end">Thành tiền</th>
-                    @if (!isCustomer) { <th class="text-center">Xóa sản phẩm</th>}
-                </tr>
-                </thead>
-            <tbody>
-                @foreach (var ct in Model)
-                {
-                    <tr>
-                        <td>@ct.TenSP</td>
-                        <td class="text-center">@ct.SLB</td>
+                    <hr class="opacity-10 my-4">
 
-                        <td class="text-end">
-                            @(ct.DGB?.ToString("#,##0.################", new System.Globalization.CultureInfo("vi-VN"))) ₫
-                        </td>
+                    <h5 class="fw-bold mb-4">Thời Gian Giao Dịch</h5>
+                    <div class="p-3 bg-light rounded-4 d-flex align-items-center gap-3">
+                        <div class="p-2 bg-white rounded-circle shadow-sm">
+                            <i class="fa-regular fa-calendar-check text-success fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="small text-muted fw-bold text-uppercase" style="font-size: 0.7rem">Ngày lập hóa đơn</div>
+                            <div class="fw-bold fs-5">@don.NgayBH.ToString("dd/MM/yyyy")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <td class="text-end">
-                            @(((ct.SLB ?? 0) * (ct.DGB ?? 0))
-                                                .ToString("#,##0.################", new System.Globalization.CultureInfo("vi-VN"))) ₫
-                        </td>
+            <!-- Items Table -->
+            <div class="col-lg-8">
+                <div class="md-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Danh Mục Sản Phẩm</h5>
+                        <span class="badged bg-light text-dark shadow-sm">@Model.Count() mục</span>
+                    </div>
 
-                        <td class="text-center">
-                            @if (!isCustomer)
-                            {
-                                <a href="@Url.Action("DeleteDetail", "DonBanHang",
-                                       new { maDBH = ct.MaDBH, maSP = ct.MaSP })"
-                                   class="btn btn-sm btn-danger">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
-                            }
-                        </td>
-                    </tr>
+                    <div class="table-responsive shadow-none border rounded-4 overflow-hidden mb-4">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4">Sản Phẩm</th>
+                                    <th class="text-center">Số Lượng</th>
+                                    <th class="text-end">Đơn Giá</th>
+                                    <th class="text-end pe-4">Thành Tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ct in Model)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="fw-bold">@ct.TenSP</div>
+                                            <div class="text-muted small">Mã SP: @ct.MaSP</div>
+                                        </td>
+                                        <td class="text-center fw-bold">@ct.SLB</td>
+                                        <td class="text-end">@ct.DGB?.ToString("N0") ₫</td>
+                                        <td class="text-end pe-4 fw-bold text-success">
+                                            @(((ct.SLB ?? 0) * (ct.DGB ?? 0)).ToString("N0")) ₫
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="p-3 bg-success-subtle rounded-4">
+                        <div class="row align-items-center">
+                            <div class="col text-success fw-bold ps-3 text-uppercase small">Tổng thanh toán</div>
+                            <div class="col text-end text-success h4 fw-bold mb-0 pe-3">
+                                @Model.Sum(x => (x.SLB ?? 0) * (x.DGB ?? 0)).ToString("N0") ₫
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    @if (!isCustomer)
+                    {
+                        <a href="@Url.Action("Edit", "DonBanHang", new { id = don.MaDBH })" class="btn btn-outline-success">
+                            <i class="fa-solid fa-pen-to-square me-2"></i>Chỉnh sửa đơn
+                        </a>
+                        @if (Context.Session.GetString("IsAdmin") == "true")
+                        {
+                            <a href="@Url.Action("Delete", "DonBanHang", new { id = don.MaDBH })" class="btn btn-outline-danger">
+                                <i class="fa-solid fa-trash me-2"></i>Xóa đơn
+                            </a>
                         }
-            </tbody>
-
-                <tfoot>
-                    <tr class="table-success fw-bold">
-                        <td colspan="3" class="text-end">Tổng cộng:</td>
-                        <td colspan="2" class="text-end">
-                            @(
-                                                Model.Sum(x => (x.SLB ?? 0) * (x.DGB ?? 0))
-                                                .ToString("#,##0.################", new System.Globalization.CultureInfo("vi-VN"))
-                                                ) ₫
-                        </td>
-                    </tr>
-                </tfoot>
-
-            </table>
-        
+                    }
+                    <a asp-action="Index" class="btn btn-light border">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Danh sách đơn
+                    </a>
+                </div>
+            </div>
+        </div>
     }
     else
     {
-        <div class="alert alert-warning">
-            Không tìm thấy đơn bán hàng cần xem chi tiết.
+        <div class="md-card text-center py-5">
+            <i class="fa-solid fa-circle-exclamation fs-1 text-warning mb-3"></i>
+            <h4>Không tìm thấy đơn hàng</h4>
+            <p class="text-muted">Đơn hàng bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
+            <a href="@Url.Action("Index")" class="btn btn-success mt-3">Quay lại danh sách</a>
         </div>
     }
-
-    <div class="mt-4">
-        @if (don != null && !isCustomer)
-        {
-            <a href="@Url.Action("Edit", "DonBanHang", new { id = don.MaDBH })" class="btn btn-warning text-white me-2">
-                <i class="fa-solid fa-pen-to-square"></i> Sửa
-            </a>
-
-            <a class="btn btn-danger me-2 text-white" href="@Url.Action("Delete", "DonBanHang", new { id = don.MaDBH })">
-                <i class="fa-solid fa-trash"></i> Xóa
-            </a>
-        }
-        <a asp-action="Index" asp-route-id="@don.MaDBH" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-    </div>
-
 </div>

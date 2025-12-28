@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class NhaCCController : Controller
 	{
 		private readonly NhaCCService _nhaCCService;
@@ -91,7 +94,7 @@ namespace QuanLyBanHang.Controllers
 			var ncc = await _nhaCCService.GetById(id);
 			if (ncc == null) return NotFound();
 
-			short maTinh = await _xaService.GetByIDWithTinh(ncc.MaXa);
+			short maTinh = await _xaService.GetMaTinhByMaXa(ncc.MaXa);
 
 			ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", maTinh);
 			var xaList = await _xaService.GetByIDTinh(maTinh);
@@ -106,7 +109,7 @@ namespace QuanLyBanHang.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				short maTinh = await _xaService.GetByIDWithTinh(model.MaXa);
+				short maTinh = await _xaService.GetMaTinhByMaXa(model.MaXa);
 				ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", maTinh);
 
 				var xaList = await _xaService.GetByIDTinh(maTinh);
@@ -131,6 +134,7 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			var ncc = await _nhaCCService.GetById(id);
@@ -139,6 +143,7 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		[HttpPost, ActionName("Delete")]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			try

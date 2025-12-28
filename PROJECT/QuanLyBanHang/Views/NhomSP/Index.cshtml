@@ -1,116 +1,97 @@
-﻿    @model IEnumerable<QuanLyBanHang.Models.NhomSP>
+﻿@model IEnumerable<QuanLyBanHang.Models.NhomSP>
 
 @{
-    ViewBag.Title = "Quản lý Nhóm sản phẩm";
+    ViewBag.Title = "Quản lý nhóm sản phẩm";
 }
 
-<style>
-    .search-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-    }
-
-        .search-wrapper input {
-            padding-left: 38px !important;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-
-        .search-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-    .table {
-        overflow-x: auto;
-        white-space: nowrap;
-        width: 100%;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f5faff;
-        transition: 0.2s;
-    }
-</style>
-
 <div class="container">
-    <h4 class="mb-3 text-success">
-        Danh sách Nhóm sản phẩm
-    </h4>    
-
-    <!--  Form -->
-    <form id="Form" method="get" class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
-        <div class="search-wrapper flex-grow-1">
-            <i class="fa fa-search"></i>
-            <input id="searchBox" type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Tìm tên loại sản phẩm">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            
         </div>
-
-        <div class="d-flex flex-wrap align-items-center gap-2">           
-            <button type="button" id="btnClear" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i>Reset</button>
-            <a href="@Url.Action("Create", "NHomSP")" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i> Add</a>
+        
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index", "LoaiSP")" class="btn btn-outline-success shadow-sm">
+                <i class="fa-solid fa-folder-tree me-2"></i>Chi tiết Loại SP
+            </a>
+            <a href="@Url.Action("Create", "NhomSP")" class="btn btn-success shadow-sm">
+                <i class="fa-solid fa-plus-circle me-2"></i>Thêm nhóm mới
+            </a>
         </div>
-    </form>
+    </div>
 
-    <table class="table  table-hover align-middle text-center shadow-sm">
-        <thead class="table-success">
-            <tr>
-                <th class="w-25">Mã Nhóm sản phẩm</th>
-                <th class="w-25">Tên Nhóm sản phẩm</th>
-            </tr>
-        </thead>
-        <tbody class="text-start">
-            @foreach (var item in Model)
-            {
-                <tr class="clickable-row" data-href="@Url.Action("Details", "NhomSP", new { id = item.MaNhom })">
-                    <td class="text-center">@item.MaNhom</td>
-                    <td class="text-center">@item.TenNhom</td>
-                                        
+    <!-- Filter Card -->
+    <div class="md-card mb-4 bg-light border-0">
+        <form id="filterForm" method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted text-uppercase">Tìm nhóm sản phẩm</label>
+                <div class="input-group bg-white border rounded-3 overflow-hidden">
+                    <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-magnifying-glass opacity-50"></i></span>
+                    <input id="searchBox" type="text" name="search" value="@ViewBag.Search" class="form-control border-0" placeholder="Ví dụ: Điện tử, Thời trang, Gia dụng...">
+                </div>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <button type="button" id="btnReset" class="btn btn-light border px-4">
+                    <i class="fa-solid fa-rotate-left me-2"></i>Làm mới
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4" style="width: 20%">Mã Nhóm</th>
+                    <th>Tên Nhóm Sản Phẩm</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-end">
-        <a asp-action="Index" asp-controller="LoaiSP" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr style="cursor: pointer" onclick="window.location='@Url.Action("Details", "NhomSP", new { id = item.MaNhom })'">
+                            <td class="ps-4">
+                                <span class="badged bg-light text-dark font-monospace border">#@item.MaNhom</span>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark fs-6">@item.TenNhom</div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="py-5 text-center text-muted">
+                            <i class="fa-solid fa-layer-group fs-1 d-block mb-3 opacity-25"></i>
+                            Chưa có dữ liệu nhóm sản phẩm nào được tạo.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 
 @section Scripts {
     <script>
-                // debounce function
-            function debounce(fn, delay) {
-                let timer = null;
-                return function() {
-                    const context = this, args = arguments;
-                    clearTimeout(timer);
-                    timer = setTimeout(() => fn.apply(context, args), delay);
-                };
-            }
-            // khi thay đổi  -> submit form
-        $("#searchBox").on("change", debounce(function(){
-            $("#Form").submit();
-        }, 400));
-
-        // clear
-        $("#btnClear").on("click", function(){
-            $("#searchBox").val("");
-            $("#Form").submit();
+        const filterForm = document.getElementById('filterForm');
+        document.getElementById('searchBox').addEventListener('input', debounce(() => filterForm.submit(), 500));
+        document.getElementById('btnReset').addEventListener('click', () => {
+            window.location.href = '@Url.Action("Index", "NhomSP")';
         });
-    </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".clickable-row").forEach(row => {
-                row.addEventListener("click", function () {
-                    window.location = this.dataset.href;
-                });
-            });
-        });
+        function debounce(fn, delay) {
+            let timer = null;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(context, args), delay);
+            };
+        }
     </script>
 }
-

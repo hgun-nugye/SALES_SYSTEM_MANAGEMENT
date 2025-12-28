@@ -2,8 +2,11 @@
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class NhomSPController : Controller
 	{
 		private readonly NhomSPService _nspService;
@@ -99,6 +102,7 @@ namespace QuanLyBanHang.Controllers
 
 		// DELETE GET
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			var model = await _nspService.GetById(id);
@@ -112,6 +116,7 @@ namespace QuanLyBanHang.Controllers
 		// DELETE POST
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			try

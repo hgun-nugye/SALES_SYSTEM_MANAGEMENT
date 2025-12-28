@@ -1,53 +1,77 @@
 ﻿@model QuanLyBanHang.Models.NhaCCDetailView
 
 @{
-    ViewBag.Title = "Xóa Nhà Cung Cấp";
+    ViewBag.Title = "Xác nhận xóa nhà cung cấp";
 }
 
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "NhaCC")" class="text-success text-decoration-none">Nhà Cung Cấp</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Xác nhận xóa</li>
+        </ol>
+    </nav>
 
-<div class=" container">
-    <h4 class="text-danger mb-3">
-        Xóa Nhà Cung Cấp
-    </h4>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="md-card border-0 shadow-lg text-center">
+                <div class="p-3 bg-danger-subtle rounded-circle d-inline-block mb-3">
+                    <i class="fa-solid fa-truck-ramp-box text-danger fs-1"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Gỡ bỏ nhà cung cấp?</h4>
+                <p class="text-muted">Việc gỡ bỏ đối tác có thể ảnh hưởng đến lịch sử nhập hàng và quản lý kho.</p>
 
-    <div class="alert alert-warning shadow-sm">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        Bạn có chắc muốn xóa Nhà cung cấp <strong>@Model.TenNCC</strong> không?
+                <div class="my-4 p-4 bg-light rounded-4 text-start">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Mã đối tác:</span>
+                        <span class="font-monospace fw-bold">#@Model.MaNCC</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Tên doanh nghiệp:</span>
+                        <span class="fw-bold">@Model.TenNCC</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Liên hệ:</span>
+                        <span class="fw-bold">@Model.DienThoaiNCC</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Vùng hoạt động:</span>
+                        <span class="fw-bold">@Model.TenTinh</span>
+                    </div>
+                </div>
+
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MaNCC" />
+                    
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-danger py-3 fw-bold" onclick="confirmDelete()">
+                            <i class="fa-solid fa-trash-can me-2"></i>Tôi hiểu, hãy xóa nhà cung cấp này
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaNCC" class="btn btn-light py-2 border fw-bold text-muted">
+                            Hủy bỏ và quay lại
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="border p-4 rounded shadow-sm bg-light">
-        <p><strong>@Html.DisplayNameFor(m => m.MaNCC):</strong> @Model.MaNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.TenNCC):</strong> @Model.TenNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.DienThoaiNCC):</strong> @Model.DienThoaiNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.EmailNCC):</strong> @Model.EmailNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.DiaChiNCC):</strong> @Model.DiaChiNCC, @Model.TenXa, @Model.TenTinh</p>
-
-    </div>
-
-    <form id="deleteForm" asp-action="Delete" method="post" class="mt-4">
-        <input type="hidden" asp-for="MaNCC" />
-        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-            <i class="fa-solid fa-trash-can me-2"></i> Xóa
-        </button>
-        <a asp-action="Details" asp-route-id="@Model.MaNCC" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-    </form>
-
 </div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function confirmDelete() {
             Swal.fire({
-                title: 'Xác nhận xóa?',
-                text: 'Bạn có chắc chắn muốn xóa nhà cung cấp này?',
+                title: 'Xác nhận xóa đối tác?',
+                text: 'Dữ liệu tồn kho và nhập hàng vẫn được lưu giữ nhưng đối tác sẽ không còn xuất hiện trong danh sách chọn.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Xóa',
+                confirmButtonText: 'Đồng ý xóa',
                 cancelButtonText: 'Hủy',
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6'
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('deleteForm').submit();

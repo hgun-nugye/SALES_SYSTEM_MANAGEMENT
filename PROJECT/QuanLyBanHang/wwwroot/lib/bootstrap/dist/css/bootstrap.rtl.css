@@ -615,7 +615,7 @@ progress {
 }
 
 .container,
-.container-fluid,
+.container,
 .container-xxl,
 .container-xl,
 .container-lg,
@@ -3969,7 +3969,7 @@ textarea.form-control-lg {
   padding-bottom: 0.5rem;
 }
 .navbar > .container,
-.navbar > .container-fluid,
+.navbar > .container,
 .navbar > .container-sm,
 .navbar > .container-md,
 .navbar > .container-lg,
@@ -4815,7 +4815,7 @@ textarea.form-control-lg {
   border-bottom-left-radius: 0.2rem;
 }
 
-.badge {
+.badged {
   display: inline-block;
   padding: 0.35em 0.65em;
   font-size: 0.75em;
@@ -4827,11 +4827,11 @@ textarea.form-control-lg {
   vertical-align: baseline;
   border-radius: 0.25rem;
 }
-.badge:empty {
+.badged:empty {
   display: none;
 }
 
-.btn .badge {
+.btn .badged {
   position: relative;
   top: -1px;
 }

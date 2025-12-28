@@ -1,13 +1,15 @@
-﻿// Đảm bảo danh sách không null để không lỗi View
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 using System.Threading.Tasks;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class DonBanHangController : Controller
 	{
 		private readonly DonBanHangService _dbhService;
@@ -38,14 +40,13 @@ namespace QuanLyBanHang.Controllers
 			return HttpContext.Session.GetString("IsCustomer") == "true";
 		}
 
-		public async Task<IActionResult> Index(string? search, int? month, int? year, string? MaTTBH)
+		public async Task<IActionResult> Index(string? search, int? month, int? year)
 		{
 			ViewBag.Search = search;
 			ViewBag.Month = month;
 			ViewBag.Year = year;
-			ViewBag.MaTTBH = MaTTBH;
 
-			var model = await _dbhService.Search(search, month, year, MaTTBH);
+			var model = await _dbhService.Search(search, month, year);
 			
 			// Nếu là khách hàng, chỉ hiển thị đơn hàng của họ
 			if (IsCustomerMode())
@@ -65,14 +66,16 @@ namespace QuanLyBanHang.Controllers
 			if (string.IsNullOrEmpty(id)) return NotFound();
 
 			var result = await _dbhService.GetByID(id);
+			if (result == null || !result.Any()) return NotFound();
+
 			return View(result);
 		}
 
-		private async Task LoadDropdowns(string? selectedKH = null, string? selectedTTDH = null, short? selectedXa = null)
+		private async Task LoadDropdowns(string? selectedKH = null)
 		{
 			// Nạp danh sách Khách hàng
 			var khachHangs = await _context.KhachHang.ToListAsync();
-			ViewBag.KhachHang = new SelectList(khachHangs, "MaKH", "TenKH", selectedKH);
+			ViewBag.MaKH = new SelectList(khachHangs, "MaKH", "TenKH", selectedKH);
 						
 			// Nạp danh sách Sản phẩm cho chi tiết đơn hàng
 			ViewBag.MaSP = new SelectList(_context.SanPham.ToList(), "MaSP", "TenSP");
@@ -91,11 +94,8 @@ namespace QuanLyBanHang.Controllers
 				}
 			}
 
-			ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh");
-			ViewBag.Xa = new SelectList(Enumerable.Empty<object>(), "MaXa", "TenXa");
 			ViewBag.MaSP = new SelectList(_context.SanPham.ToList(), "MaSP", "TenSP");
 			await LoadDropdowns();
-			ViewData["MaXaSelected"] = null;
 
 			var model = new DonBanHang();
 			
@@ -111,15 +111,13 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(DonBanHang model, short maTinh)
+		public async Task<IActionResult> Create(DonBanHang model)
 		{
 			try
 			{
 				bool isCustomer = IsCustomerMode();
 
 				ModelState.Remove("MaDBH");
-				ModelState.Remove("Xa");
-				ModelState.Remove("MaXa");
 
 				// Nếu là khách hàng, tự động gán MaKH từ session
 				if (isCustomer)
@@ -128,18 +126,6 @@ namespace QuanLyBanHang.Controllers
 					if (!string.IsNullOrEmpty(userId))
 					{
 						model.MaKH = userId;
-					}
-
-					if (string.IsNullOrEmpty(model.MaTTBH))
-					{
-						model.MaTTBH = "CHO";
-					}
-				}
-				else
-				{
-					if (string.IsNullOrEmpty(model.MaTTBH))
-					{
-						ModelState.AddModelError("MaTTBH", "Vui lòng chọn trạng thái đơn hàng.");
 					}
 				}
 
@@ -150,36 +136,6 @@ namespace QuanLyBanHang.Controllers
 						? "Không tìm thấy thông tin khách hàng. Vui lòng đăng nhập lại."
 						: "Vui lòng chọn khách hàng.");
 				}
-
-				// Kiểm tra Địa chỉ
-				if (string.IsNullOrEmpty(model.DiaChiDBH))
-				{
-					ModelState.AddModelError("DiaChiDBH", "Vui lòng nhập địa chỉ nhận hàng.");
-				}
-
-				// Kiểm tra Tỉnh/Xã (Nếu maTinh = 0 hoặc MaXa = null)
-				if (maTinh == 0)
-				{
-					ModelState.AddModelError("maTinh", "Vui lòng chọn Tỉnh/Thành phố.");
-				}
-				else if (model.MaXa == null || model.MaXa == 0)
-				{
-					ModelState.AddModelError("MaXa", "Vui lòng chọn Xã/Phường.");
-				}
-
-				// Kiểm tra Ngày bán/mua
-				if (model.NgayBH == default(DateTime))
-				{
-					ModelState.AddModelError("NgayBH", isCustomer
-						? "Vui lòng chọn ngày mua hàng."
-						: "Vui lòng chọn ngày bán hàng.");
-				}
-
-				ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", maTinh);
-
-				var xaList = await _xaService.GetByIDTinh(maTinh);
-				ViewBag.Xa = new SelectList(xaList, "MaXa", "TenXa", model.MaXa);
-				ViewData["MaXaSelected"] = model.MaXa;
 
 				model.CTBHs ??= new List<CTBH>();
 
@@ -273,7 +229,7 @@ namespace QuanLyBanHang.Controllers
 				model.CTBHs = new List<CTBH> { new CTBH() };
 			}
 
-			await LoadDropdowns(model.MaKH, model.MaTTBH, model.MaXa);
+			await LoadDropdowns(model.MaKH);
 
 			return View(model);
 		}
@@ -302,31 +258,10 @@ namespace QuanLyBanHang.Controllers
 				MaDBH = header.MaDBH!,
 				NgayBH = header.NgayBH,
 				MaKH = header.MaKH!,
-				DiaChiDBH = header.DiaChiDBH ?? "",
-				MaXa = header.MaXa ?? 0,
-				TenXa= header.TenXa,
-				TenTinh = header.TenTinh,
-				CTBHs = details,
-				MaTTBH = header.MaTTBH ?? string.Empty
+				CTBHs = details
 			};
 						
-			short? currentMaTinh = null;
-
-			if (header.MaXa.HasValue)
-			{
-				currentMaTinh = await _xaService.GetByIDWithTinh(header.MaXa.Value);
-			}
-
-			ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", currentMaTinh);
-
-			var listXa = currentMaTinh.HasValue
-					? _context.Xa.Where(x => x.MaTinh == currentMaTinh.Value).ToList()
-					: new List<Xa>();
-
-			ViewData["MaXaSelected"] = header.MaXa;
-			ViewBag.Xa = new SelectList(listXa, "MaXa", "TenXa", header.MaXa);
-
-			await LoadDropdowns(header.MaKH, header.MaTTBH);
+			await LoadDropdowns(header.MaKH);
 			
 			return View(ct);
 		}
@@ -384,13 +319,13 @@ namespace QuanLyBanHang.Controllers
 
 				if (!ModelState.IsValid)
 				{
-					await LoadDropdowns(model.MaKH, model.MaTTBH, model.MaXa);
+					await LoadDropdowns(model.MaKH);
 					return View(model);
 				}
 
 				if (!ModelState.IsValid)
 				{
-					await LoadDropdowns(model.MaKH, model.MaTTBH, model.MaXa);
+					await LoadDropdowns(model.MaKH);
 					model.CTBHs = cleanedDetails.Any() ? cleanedDetails : model.CTBHs;
 					return View(model);
 				}
@@ -407,7 +342,7 @@ namespace QuanLyBanHang.Controllers
 				TempData["ErrorMessage"] = ex.Message;
 			}
 
-			await LoadDropdowns(model.MaKH, model.MaTTBH, model.MaXa);
+			await LoadDropdowns(model.MaKH);
 			if (model.CTBHs == null || !model.CTBHs.Any())
 				model.CTBHs = new List<CTBH> { new CTBH() };
 
@@ -415,6 +350,7 @@ namespace QuanLyBanHang.Controllers
 
 		}
 
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			if (string.IsNullOrEmpty(id)) return NotFound();
@@ -428,6 +364,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			try
@@ -444,6 +381,7 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteDetail(string maDBH, string maSP)
 		{
 			var model = await _dbhService.GetDetail(maDBH, maSP);
@@ -454,6 +392,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteDetailConfirmed(string maDBH, string maSP)
 		{
 			try

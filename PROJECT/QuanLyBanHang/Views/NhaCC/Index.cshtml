@@ -1,143 +1,111 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.NhaCCDetailView>
 
 @{
-    ViewBag.Title = "Quản lý Nhà Cung Cấp";
+    ViewBag.Title = "Đối tác & Nhà cung cấp";
 }
 
-<style>
-    .search-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-    }
-
-        .search-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .search-wrapper input {
-            padding-left: 38px !important;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-
-    .table {
-        overflow-x: auto;
-        white-space: nowrap;
-        width: 100%;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f5faff;
-        transition: 0.2s;
-    }
-</style>
-
-
 <div class="container">
-    <h4 class="mb-5 text-success">
-        Danh sách Nhà Cung Cấp
-    </h4>
-
-    <!--  Form -->
-    <form id="Form" method="get" class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
-        <div class="search-wrapper flex-grow-1">
-            <i class="fa fa-search"></i>
-            <input id="searchBox" type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Tìm tên, mã nhà cung cấp, email...">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+          
         </div>
+        
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Create", "NhaCC")" class="btn btn-success shadow-sm">
+                <i class="fa-solid fa-truck-field me-2"></i>Thêm đối tác mới
+            </a>
+        </div>
+    </div>
 
-        <div class="d-flex flex-wrap align-items-center gap-2">
-            <!--  TỈNH -->
-            <div class="d-flex align-items-center gap-2">
-                <label class="w-100 text-end opacity-50">Tỉnh/Thành phố</label>
-                <select asp-items="ViewBag.TinhList" id="tinh" name="tinh" class="form-select">
-                    <option value="">-- Tỉnh --</option>
+    <!-- Filter Card -->
+    <div class="md-card mb-4 bg-light border-0">
+        <form id="filterForm" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-muted text-uppercase">Tìm kiếm đối tác</label>
+                <div class="input-group bg-white border rounded-3 overflow-hidden">
+                    <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-magnifying-glass opacity-50"></i></span>
+                    <input id="searchBox" type="text" name="search" value="@ViewBag.Search" class="form-control border-0" placeholder="Tên, Email hoặc Số điện thoại...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted text-uppercase">Khu vực (Tỉnh)</label>
+                <select id="tinhSelect" name="tinh" asp-items="ViewBag.TinhList" class="form-select border rounded-3">
+                    <option value="">Tất cả khu vực</option>
                 </select>
             </div>
+            <div class="col-md-auto ms-auto">
+                <button type="button" id="btnReset" class="btn btn-light border px-4">
+                    <i class="fa-solid fa-rotate-left me-2"></i>Làm mới
+                </button>
+            </div>
+        </form>
+    </div>
 
-            <button type="button" id="btnClear" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i>Reset</button>
-            <a href="@Url.Action("Create", "NhaCC")" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i> Add</a>
-        </div>
-    </form>
-
-    <table class="table  table-hover align-middle shadow-sm">
-        <thead class="table-success text-center">
-            <tr>
-                <th>Mã NCC</th>
-                <th>Tên NCC</th>
-                <th>Điện thoại</th>
-                <th>Email</th>
-                <th>Địa chỉ</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
+    <!-- Data Table -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Mã NCC</th>
+                    <th>Tên Nhà Cung Cấp</th>
+                    <th>Liên Hệ</th>
+                    <th>Địa Chỉ Trụ Sở</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
                 {
-                    <tr class="clickable-row" data-href="@Url.Action("Details", "NhaCC", new { id = item.MaNCC })">
-
-                        <td>@item.MaNCC</td>
-                        <td>@item.TenNCC</td>
-                        <td>@item.DienThoaiNCC</td>
-                        <td>@item.EmailNCC</td>
-                        <td>@item.DiaChiNCC, @item.TenXa, @item.TenTinh</td>
-
+                    @foreach (var item in Model)
+                    {
+                        <tr style="cursor: pointer" onclick="window.location='@Url.Action("Details", "NhaCC", new { id = item.MaNCC })'">
+                            <td class="ps-4">
+                                <span class="badged bg-light text-dark font-monospace border">@item.MaNCC</span>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark">@item.TenNCC</div>
+                                <div class="small text-muted font-monospace">@item.EmailNCC</div>
+                            </td>
+                            <td>
+                                <div class="h6 mb-0">@item.DienThoaiNCC</div>
+                            </td>
+                            <td>
+                                <div class="small text-dark">@item.DiaChiNCC</div>
+                                <div class="small text-muted">@item.TenXa, @item.TenTinh</div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="py-5 text-center text-muted">
+                            <i class="fa-solid fa-inbox fs-1 d-block mb-3 opacity-25"></i>
+                            Không tìm thấy nhà cung cấp phù hợp.
+                        </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="8" class="text-center text-muted fst-italic">Không có nhà cung cấp nào.</td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @section Scripts {
     <script>
-                // debounce function
-            function debounce(fn, delay) {
-                let timer = null;
-                return function() {
-                    const context = this, args = arguments;
-                    clearTimeout(timer);
-                    timer = setTimeout(() => fn.apply(context, args), delay);
-                };
-            }
+        function debounce(fn, delay) {
+            let timer = null;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(context, args), delay);
+            };
+        }
 
-        // khi thay đổi  -> submit form
-        $("#searchBox").on("change", debounce(function(){
-            $("#Form").submit();
-        }, 400));
-
-             // tinh vẫn submit ngay khi chọn
-                $("#tinh").on("change", function () {
-                    $("#Form").submit();
-                });
-
-        // clear form
-        $("#btnClear").on("click", function(){
-            $("#searchBox").val("");
-            $("#tinh").val("");
-            $("#Form").submit();
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".clickable-row").forEach(row => {
-                row.addEventListener("click", function () {
-                    window.location = this.dataset.href;
-                });
-            });
+        const filterForm = document.getElementById('filterForm');
+        document.getElementById('searchBox').addEventListener('input', debounce(() => filterForm.submit(), 500));
+        document.getElementById('tinhSelect').addEventListener('change', () => filterForm.submit());
+        document.getElementById('btnReset').addEventListener('click', () => {
+            window.location.href = '@Url.Action("Index", "NhaCC")';
         });
     </script>
 }

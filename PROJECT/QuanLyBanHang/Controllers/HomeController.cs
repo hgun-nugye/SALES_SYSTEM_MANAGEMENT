@@ -14,6 +14,7 @@ namespace QuanLyBanHang.Controllers
         private readonly KhachHangService _khachHangService;
         private readonly XaService _xaService;
         private readonly TinhService _tinhService;
+        private readonly TaiKhoanService _taiKhoanService;
         private readonly AppDbContext _context;
 		private readonly IWebHostEnvironment _environment;
 
@@ -24,8 +25,8 @@ namespace QuanLyBanHang.Controllers
 			KhachHangService khachHangService,
 			XaService xaService,
 			TinhService tinhService,
-			AppDbContext context
-,
+			TaiKhoanService taiKhoanService,
+			AppDbContext context,
 			IWebHostEnvironment environment)
 		{
 			_logger = logger;
@@ -33,6 +34,7 @@ namespace QuanLyBanHang.Controllers
 			_khachHangService = khachHangService;
 			_xaService = xaService;
 			_tinhService = tinhService;
+			_taiKhoanService = taiKhoanService;
 			_context = context;
 			_environment = environment;
 		}
@@ -48,7 +50,11 @@ namespace QuanLyBanHang.Controllers
         {
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
             {
-                return RedirectToAction("Index");
+                if (HttpContext.Session.GetString("IsAdmin") == "true")
+                {
+                    return RedirectToAction("Index", "BaoCao");
+                }
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -63,25 +69,26 @@ namespace QuanLyBanHang.Controllers
 				return View();
 			}
 
-			// 1. Kiểm tra trong bảng KhachHang
-			var khachHang = await _context.KhachHang
-				.FirstOrDefaultAsync(kh => kh.TenDNKH == username);
+			// Xác thực đăng nhập (không hash password)
+			var taiKhoan = await _taiKhoanService.Authenticate(username, password);
 
-			// Sử dụng BCrypt.Verify để so sánh mật khẩu nhập vào với mật khẩu hash trong DB
-			if (khachHang != null && BCrypt.Net.BCrypt.Verify(password, khachHang.MatKhauKH))
+			if (taiKhoan != null)
 			{
-				// Đăng nhập thành công - Khách hàng
+				// Đăng nhập thành công
 				HttpContext.Session.SetString("IsLoggedIn", "true");
-				HttpContext.Session.SetString("IsCustomer", "true");
-				HttpContext.Session.SetString("UserId", khachHang.MaKH);
-				HttpContext.Session.SetString("UserName", khachHang.TenKH);
-				HttpContext.Session.SetString("UserType", "Customer");
-				HttpContext.Session.SetString("UserAvatar", khachHang.AnhKH ?? "");
-				TempData["SuccessMessage"] = "Đăng nhập thành công!";
-				return RedirectToAction("Index", "SanPham");
-			}
-			
+				HttpContext.Session.SetString("UserId", taiKhoan.MaTK);
+				HttpContext.Session.SetString("UserName", taiKhoan.TenDN);
+				HttpContext.Session.SetString("IsAdmin", taiKhoan.VaiTro ? "true" : "false");
 
+				TempData["SuccessMessage"] = $"Chào mừng {taiKhoan.TenDN}!";
+				
+				if (taiKhoan.VaiTro)
+				{
+					return RedirectToAction("Index", "BaoCao");
+				}
+				return RedirectToAction("Index", "Home");
+			}
+						
 			// Đăng nhập thất bại
 			TempData["ErrorMessage"] = "Tên đăng nhập hoặc mật khẩu không đúng!";
 			return View();
@@ -213,6 +220,11 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult AccessDenied()
         {
             return View();
         }

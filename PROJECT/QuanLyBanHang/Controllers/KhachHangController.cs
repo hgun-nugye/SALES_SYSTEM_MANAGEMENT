@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using QuanLyBanHang.Filters;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class KhachHangController : Controller
 	{
 		private readonly AppDbContext _context;
@@ -152,12 +155,10 @@ namespace QuanLyBanHang.Controllers
 			var kh = await _khService.GetByID(id);
 			if (kh == null) return NotFound();
 
-			short maTinh = kh.MaXa.HasValue ? await _xaService.GetByIDWithTinh(kh.MaXa.Value) : (short)0;
+			// Lấy MaTinh từ MaXa (trả về short)
+		short maTinh = kh.MaXa.HasValue ? await _xaService.GetMaTinhByMaXa(kh.MaXa.Value) : (short)0;
 
-			ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", maTinh);
-			var xaList = await _xaService.GetByIDTinh(maTinh);
-			ViewBag.Xa = new SelectList(xaList, "MaXa", "TenXa", kh.MaXa);
-			ViewData["MaXaSelected"] = kh.MaXa;
+		await LoadLocationData(maTinh, kh.MaXa);
 			return View(kh);
 		}
 
@@ -166,14 +167,10 @@ namespace QuanLyBanHang.Controllers
 		public async Task<IActionResult> Edit(KhachHang model, IFormFile? AnhFile)
 		{
 			if (!ModelState.IsValid)
-			{
-				short maTinh = model.MaXa.HasValue ? await _xaService.GetByIDWithTinh(model.MaXa.Value) : (short)0;
-				ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", maTinh);
-
-				var xaList = await _xaService.GetByIDTinh(maTinh);
-				ViewBag.Xa = new SelectList(xaList, "MaXa", "TenXa", model.MaXa);
-				ViewData["MaXaSelected"] = model.MaXa;
-				return View(model);
+		{
+			short maTinh = model.MaXa.HasValue ? await _xaService.GetMaTinhByMaXa(model.MaXa.Value) : (short)0;
+			await LoadLocationData(maTinh, model.MaXa);
+			return View(model);
 			}
 
 			try
@@ -185,19 +182,33 @@ namespace QuanLyBanHang.Controllers
 			catch (Exception ex)
 			{
 				ModelState.AddModelError("", ex.Message);
-				TempData["ErrorMessage"] = ex.Message;
+			TempData["ErrorMessage"] = ex.Message;
 
-				short maTinh = model.MaXa.HasValue ? await _xaService.GetByIDWithTinh(model.MaXa.Value) : (short)0;
-				ViewBag.Tinh = new SelectList(_context.Tinh, "MaTinh", "TenTinh", maTinh);
-
-				var xaList = await _xaService.GetByIDTinh(maTinh);
-				ViewBag.Xa = new SelectList(xaList, "MaXa", "TenXa", model.MaXa);
+			short maTinh = model.MaXa.HasValue ? await _xaService.GetMaTinhByMaXa(model.MaXa.Value) : (short)0;
+				await LoadLocationData(maTinh, model.MaXa);
 
 				return View(model);
 			}
 		}
 
+		// --- Hàm hỗ trợ load DropdownList để tránh lặp code ---
+		private async Task LoadLocationData(short maTinhSelected, int? maXaSelected)
+		{
+			// Load danh sách Tỉnh
+			var tinhList = await _context.Tinh.ToListAsync();
+			ViewBag.Tinh = new SelectList(tinhList, "MaTinh", "TenTinh", maTinhSelected);
+
+			// Load danh sách Xã theo Tỉnh đã chọn
+			var xaList = maTinhSelected > 0
+				? await _xaService.GetByMaTinh(maTinhSelected)
+				: new List<Xa>();
+
+			ViewBag.Xa = new SelectList(xaList, "MaXa", "TenXa", maXaSelected);
+			ViewData["MaXaSelected"] = maXaSelected;
+		}
+
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			if (string.IsNullOrEmpty(id)) return BadRequest();
@@ -210,6 +221,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			if (string.IsNullOrEmpty(id))

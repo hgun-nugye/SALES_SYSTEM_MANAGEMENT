@@ -43,20 +43,7 @@ namespace QuanLyBanHang.Models
 		public string? DiaChiKH { get; set; }
 
 		[Display(Name = "Mã xã")]
-		public short? MaXa { get; set; }
-
-		
-		//   Tên đăng nhập & mật khẩu		
-		[Required(ErrorMessage = "Tên đăng nhập không được để trống")]
-		[StringLength(50, ErrorMessage = "Tên đăng nhập không được quá 50 ký tự")]
-		[Display(Name = "Tên đăng nhập")]
-		public string TenDNKH { get; set; } = string.Empty;
-
-		[Required(ErrorMessage = "Mật khẩu không được để trống")]
-		[StringLength(255)]
-		[Display(Name = "Mật khẩu")]
-		public string MatKhauKH { get; set; } = string.Empty;
-
+		public int? MaXa { get; set; }
 		
 		//   Thuộc tính hiển thị		
 		[NotMapped]
@@ -93,9 +80,6 @@ namespace QuanLyBanHang.Models
 
 		[Display(Name = "Địa chỉ")]
 		public string? DiaChiKH { get; set; }
-
-		[Display(Name = "Tên đăng nhập")]
-		public string? TenDNKH { get; set; }
 
 		[Display(Name = "Tên xã")]
 		public string? TenXa { get; set; }

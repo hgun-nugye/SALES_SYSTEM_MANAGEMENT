@@ -1,0 +1,57 @@
+@model QuanLyBanHang.Models.TaiKhoan
+
+@{
+    ViewBag.Title = "Xác nhận xóa tài khoản";
+}
+
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "TaiKhoan")" class="text-success text-decoration-none">Tài Khoản</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Xác nhận xóa</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card border-0 shadow-lg text-center">
+                <div class="p-3 bg-danger-subtle rounded-circle d-inline-block mb-3">
+                    <i class="fa-solid fa-user-slash text-danger fs-1"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Vô hiệu hóa tài khoản?</h4>
+                <p class="text-muted">Bạn đang thực hiện xóa tài khoản <strong>@Model.TenDN</strong>. Người dùng này sẽ không thể truy cập hệ thống sau khi xóa.</p>
+
+                <div class="my-4 p-4 bg-light rounded-4 text-start font-monospace small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Mã tài khoản:</span>
+                        <span class="fw-bold">#@Model.MaTK</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Vai trò hiện tại:</span>
+                        <span class="fw-bold text-uppercase">@Model.TenVaiTro</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning border-0 small text-start mb-4">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <strong>Cảnh báo:</strong> Mọi phiên đăng nhập hiện tại của người dùng này sẽ bị chấm dứt ngay lập tức.
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MaTK" />
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger py-3 fw-bold">
+                            <i class="fa-solid fa-trash-can me-2"></i>Xác nhận xóa vĩnh viễn
+                        </button>
+                        <a asp-action="Index" class="btn btn-light border py-2 text-muted fw-bold">
+                            Hủy bỏ và quay lại
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

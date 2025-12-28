@@ -3,144 +3,126 @@
 @{
     ViewBag.Title = "Quản lý Khách hàng";
 }
-<style>
-    .search-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-    }
-
-        .search-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .search-wrapper input {
-            padding-left: 38px !important;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-}
-
-    .table-hover tbody tr:hover {
-        background-color: #f5faff;
-        transition: 0.2s;
-    }
-</style>
 
 <div class="container">
-    <h4 class="mb-5 text-success">
-        Danh sách Khách hàng
-    </h4>
-
-    <!--  Form -->
-    <form id="Form" method="get" class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
-
-        <div class="search-wrapper flex-grow-1">
-            <i class="fa fa-search"></i>
-            <input id="searchBox" type="text" name="search" value="@ViewBag.Search"
-                   class="form-control" placeholder="Tìm tên, email, SĐT...">
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+           
         </div>
+        
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Create", "KhachHang")" class="btn btn-success shadow-sm">
+                <i class="fa-solid fa-user-plus me-2"></i>Thêm khách hàng mới
+            </a>
+        </div>
+    </div>
 
-        <div class="d-flex flex-wrap align-items-center gap-2">
-            <!--  TỈNH -->
-
-            <div class="d-flex align-items-center gap-2">
-                <label class="w-100 text-end opacity-50">Tỉnh/Thành phố</label>
-                <select asp-items="ViewBag.TinhList" id="tinh" name="tinh" class="form-select">
-                    <option value="">-- Tất cả --</option>
+    <!-- Filters -->
+    <div class="md-card mb-4">
+        <form id="filterForm" method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small text-uppercase fw-bold text-muted">Tìm kiếm thông tin</label>
+                <div class="input-group border rounded-3 bg-light">
+                    <span class="input-group-text bg-transparent border-0"><i class="fa fa-search text-muted"></i></span>
+                    <input type="text" name="search" id="searchBox" class="form-control border-0 bg-transparent" 
+                           placeholder="Tên, Email hoặc Số điện thoại..." value="@ViewBag.Search">
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label small text-uppercase fw-bold text-muted">Khu vực (Tỉnh/Thành)</label>
+                <select asp-items="ViewBag.TinhList" id="tinhSelect" name="tinh" class="form-select border-0 bg-light">
+                    <option value="">Tất cả khu vực</option>
                 </select>
-            </div>               
+            </div>
 
-            <button type="button" id="btnClear" class="btn btn-secondary">
-                <i class="fa-solid fa-rotate-left"></i>Reset
-            </button>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="button" id="btnClear" class="btn btn-light flex-grow-1 border">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+                <button type="submit" class="btn btn-success flex-grow-1 shadow-sm">
+                    <i class="fa-solid fa-filter me-2"></i>Lọc
+                </button>
+            </div>
+        </form>
+    </div>
 
-            <a href="@Url.Action("Create", "KhachHang")" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i> Add</a>
-
-        </div>
-    </form>
-
-    <!-- TABLE -->
-    <table class="table  table-hover align-middle shadow-sm">
-        <thead class="table-success text-center">
-            <tr>
-                <th>Mã KH</th>
-                <th>Tên KH</th>
-                <th>Điện thoại</th>
-                <th>Email</th>
-                <th>Địa chỉ</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
+    <!-- Data Table -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Thông Tin Khách Hàng</th>
+                    <th>Liên Hệ</th>
+                    <th>Địa Chỉ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
                 {
-                    <tr class="clickable-row" data-href="@Url.Action("Details", "KhachHang", new { id = item.MaKH })">
-
-                        <td>
-                            <img src="@(string.IsNullOrEmpty(item.AnhKH) ? Url.Content("~/images/default-user.png") : @Url.Content("~/images/customers/" + item.AnhKH))" width="40" height="40" style="object-fit:cover; border-radius:10px;">
-                            @item.MaKH
+                    foreach (var item in Model)
+                    {
+                        <tr style="cursor: pointer" onclick="window.location='@Url.Action("Details", "KhachHang", new { id = item.MaKH })'">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar-wrapper p-1 bg-white shadow-sm rounded-3">
+                                        <img src="@(string.IsNullOrEmpty(item.AnhKH) ? Url.Content("~/images/default-user.png") : Url.Content("~/images/customers/" + item.AnhKH))" 
+                                             width="48" height="48" class="rounded-2" style="object-fit:cover;">
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark">@item.TenKH</div>
+                                        <div class="small font-monospace text-muted">ID: @item.MaKH</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="small mb-1"><i class="fa-solid fa-phone me-2 text-muted"></i>@item.DienThoaiKH</div>
+                                <div class="small"><i class="fa-solid fa-envelope me-2 text-muted"></i>@item.EmailKH</div>
+                            </td>
+                            <td>
+                                <div class="small text-dark fw-medium">@item.DiaChiKH</div>
+                                <div class="small text-muted">@item.TenXa, @item.TenTinh</div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-users-slash d-block fs-1 mb-3 opacity-25"></i>
+                            Không tìm thấy dữ liệu khách hàng nào
                         </td>
-                        <td>@item.TenKH</td>
-                        <td>@item.DienThoaiKH</td>
-                        <td>@item.EmailKH</td>
-                        <td>@item.DiaChiKH, @item.TenXa, @item.TenTinh</td>
-
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" class="text-center text-muted fst-italic">Không có khách hàng nào.</td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @section Scripts {
     <script>
-        // debounce function
-        function debounce(fn, delay) {
-            let timer = null;
-            return function() {
-                const context = this, args = arguments;
+        $(document).ready(function() {
+            // Auto-submit on change
+            $('#tinhSelect').on('change', function() {
+                $('#filterForm').submit();
+            });
+
+            // Clear filter
+            $('#btnClear').on('click', function() {
+                $('#searchBox').val('');
+                $('#tinhSelect').val('');
+                $('#filterForm').submit();
+            });
+
+            // Debounce search
+            let timer;
+            $('#searchBox').on('input', function() {
                 clearTimeout(timer);
-                timer = setTimeout(() => fn.apply(context, args), delay);
-            };
-        }
-
-        // áp dụng cho searchBox
-        $("#searchBox").on("change", debounce(function() {
-            $("#Form").submit();
-        }, 400));
-
-        // tinh vẫn submit ngay khi chọn
-        $("#tinh").on("change", function () {
-            $("#Form").submit();
-        });
-
-        // clear 
-        $("#btnClear").on("click", function () {
-            $("#searchBox").val("");
-            $("#tinh").val("");
-            $("#Form").submit();
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".clickable-row").forEach(row => {
-                row.addEventListener("click", function () {
-                    window.location = this.dataset.href;
-                });
+                timer = setTimeout(() => {
+                    $('#filterForm').submit();
+                }, 500);
             });
         });
     </script>

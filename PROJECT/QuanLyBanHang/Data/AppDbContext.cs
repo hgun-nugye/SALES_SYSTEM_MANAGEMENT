@@ -20,6 +20,7 @@ namespace QuanLyBanHang.Services
 		public DbSet<Xa> Xa { get; set; } = null!;
 		public DbSet<NhaCC> NhaCC { get; set; } = null!;
 		public DbSet<KhachHang> KhachHang { get; set; } = null!;
+		public DbSet<TaiKhoan> TaiKhoan { get; set; } = null!;
 		public DbSet<NhomSP> NhomSP { get; set; } = null!;
 		public DbSet<LoaiSP> LoaiSP { get; set; } = null!;
 		public DbSet<TrangThai> TrangThai { get; set; } = null!;

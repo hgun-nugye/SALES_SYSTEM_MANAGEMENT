@@ -1,31 +1,78 @@
 ﻿@model QuanLyBanHang.Models.NhaCCDetailView
 @{
-    ViewBag.Title = "Chi tiết Nhà Cung Cấp";
+    ViewBag.Title = "Thông tin Nhà cung cấp";
 }
 
 <div class="container">
-    <h4 class="text-success mb-3">
-        Chi tiết Nhà Cung Cấp
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "NhaCC")" class="text-success text-decoration-none">Nhà Cung Cấp</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.MaNCC</li>
+        </ol>
+    </nav>
 
-    <div class="border p-4 rounded shadow-sm bg-light">
-        <p><strong>@Html.DisplayNameFor(m => m.MaNCC):</strong> @Model.MaNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.TenNCC):</strong> @Model.TenNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.DienThoaiNCC):</strong> @Model.DienThoaiNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.EmailNCC):</strong> @Model.EmailNCC</p>
-        <p><strong>@Html.DisplayNameFor(m => m.DiaChiNCC):</strong> @Model.DiaChiNCC, @Model.TenXa, @Model.TenTinh</p>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="md-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Dữ liệu đối tác</h5>
+                    <span class="badged bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                        <i class="fa-solid fa-handshake me-2"></i>Đối tác tin cậy
+                    </span>
+                </div>
 
-    </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Tên doanh nghiệp</label>
+                        <div class="h5 fw-bold text-dark">@Model.TenNCC</div>
+                    </div>
+                </div>
 
-    <div class="mt-4">
-        <a class="btn btn-warning text-white me-2" href="@Url.Action("Edit", "NhaCC", new { id = Model.MaNCC })">
-            <i class="fa-solid fa-pen-to-square"></i> Sửa
-        </a>
-        <a class="btn btn-danger me-2 text-white" href="@Url.Action("Delete", "NhaCC", new { id = Model.MaNCC })">
-            <i class="fa-solid fa-trash"></i> Xóa
-        </a>
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
+                <hr class="opacity-10 my-4">
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Số điện thoại</label>
+                        <div class="h6 text-dark"><i class="fa-solid fa-phone me-2 text-muted"></i>@Model.DienThoaiNCC</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Email giao dịch</label>
+                        <div class="h6 text-dark"><i class="fa-solid fa-envelope me-2 text-muted"></i>@Model.EmailNCC</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Văn phòng đại diện</label>
+                        <div class="h6 text-dark mb-0">
+                            <i class="fa-solid fa-location-dot me-2 text-muted"></i>@Model.DiaChiNCC, @Model.TenXa, @Model.TenTinh
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="md-card bg-light border-0 mb-4">
+                <h6 class="fw-bold text-muted text-uppercase mb-4 small">Mã định danh hệ thống</h6>
+                <div class="font-monospace fw-bold h5 mb-0">#@Model.MaNCC</div>
+            </div>
+
+            <div class="md-card">
+                <h6 class="fw-bold text-muted text-uppercase mb-4 small">Thao tác quản trị</h6>
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Edit", "NhaCC", new { id = Model.MaNCC })" class="btn btn-success">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Cập nhật thông tin
+                    </a>
+                    @if (Context.Session.GetString("IsAdmin") == "true")
+                    {
+                        <a href="@Url.Action("Delete", "NhaCC", new { id = Model.MaNCC })" class="btn btn-outline-danger">
+                            <i class="fa-solid fa-trash me-2"></i>Gỡ bỏ đối tác
+                        </a>
+                    }
+                    <a asp-action="Index" class="btn btn-light border mt-2">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Quay lại danh sách
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

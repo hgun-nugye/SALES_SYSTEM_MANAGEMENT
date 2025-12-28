@@ -1,43 +1,72 @@
 ﻿@model QuanLyBanHang.Models.Xa
 @{
-    ViewBag.Title = "Sửa Xã";
+    ViewBag.Title = "Chỉnh sửa địa danh";
 }
 
-<div class=" container">
-    <h4 class="text-success mb-3">
-        Sửa Thông Tin Xã
-    </h4>
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Xa")" class="text-success text-decoration-none">Xã / Phường</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "Xa", new { id = Model.MaXa })" class="text-success text-decoration-none">@Model.MaXa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+        </ol>
+    </nav>
 
-    <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-light">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card">
+                <div class="text-center mb-4">
+                    <div class="p-3 bg-warning-subtle rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-map-location text-warning fs-2"></i>
+                    </div>
+                    <h4 class="fw-bold">Cập nhật đơn vị hành chính</h4>
+                    <p class="text-muted small">Cập nhật tên gọi hoặc thay đổi tỉnh/thành chủ quản của xã này.</p>
+                </div>
 
-        <div class="form-group mb-3">
-            <label asp-for="MaXa" class="form-label"></label>
-            <input asp-for="MaXa" class="form-control" readonly />
-        </div>
-        <div class="form-group mb-3">
-            <label asp-for="TenXa" class="form-label"></label>
-            <input asp-for="TenXa" class="form-control" />
-            <span asp-validation-for="TenXa" class="text-danger"></span>
-        </div>
-      
-        <div class="form-group mb-3">
-            <label asp-for="MaTinh" class="form-label"></label>
-            <select id="MaTinh" name="maTinh" class="form-control" asp-items="@ViewBag.MaTinhList">
-                <option value="">@Model.TenTinh</option>
-            </select>
-            <span asp-validation-for="MaTinh" class="text-danger"></span>
-        </div>
+                <form asp-action="Edit" method="post">
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger shadow-sm mb-4" })
+                    
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Mã định danh (Read-only)</label>
+                        <div class="p-2 px-3 bg-light rounded-3 font-monospace fw-bold text-muted border">
+                            <i class="fa-solid fa-lock me-2"></i>#@Model.MaXa
+                            <input type="hidden" asp-for="MaXa" />
+                        </div>
+                    </div>
 
-        <div class="mt-4 d-flex gap-2">
-            <button type="submit" class="btn btn-warning text-white">
-                <i class="fa-solid fa-save"></i> Cập nhật
-            </button>
-            <a asp-action="Details" asp-route-id="@Model.MaXa" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left"></i> Quay lại
-            </a>
-        </div>
-    </form>
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Tên Xã / Phường mới</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-map-pin text-muted"></i></span>
+                            <input asp-for="TenXa" class="form-control border-0 bg-transparent py-2" />
+                        </div>
+                        <span asp-validation-for="TenXa" class="text-danger small mt-1"></span>
+                    </div>
 
-   
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Thuộc Tỉnh / Thành Phố</label>
+                        <div class="input-group border rounded-3 bg-light overflow-hidden">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-city text-muted"></i></span>
+                            <select id="MaTinh" name="maTinh" class="form-select border-0 bg-transparent py-2" asp-items="@ViewBag.MaTinhList">
+                                <option value="">-- @Model.TenTinh --</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="MaTinh" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <hr class="opacity-10 my-4">
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success py-2 fw-bold shadow-sm">
+                            <i class="fa-solid fa-save me-2"></i>Cập nhật địa danh
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaXa" class="btn btn-light border py-2 text-muted fw-bold">
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

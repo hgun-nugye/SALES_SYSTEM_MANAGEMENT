@@ -1,28 +1,63 @@
 ﻿@model QuanLyBanHang.Models.LoaiSPDto
 @{
-    ViewBag.Title = "Chi tiết Loại sản phẩm";
+    ViewBag.Title = "Thông tin loại sản phẩm";
 }
 
 <div class="container">
-    <h4 class="text-success mb-3">
-        Chi tiết Loại sản phẩm
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "LoaiSP")" class="text-success text-decoration-none">Loại Sản Phẩm</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.MaLoai</li>
+        </ol>
+    </nav>
 
-    <div class="border p-4 rounded shadow-sm bg-light">
-            <p><strong>@Html.DisplayNameFor(m => m.MaLoai):</strong> @Model.MaLoai</p>
-            <p><strong>@Html.DisplayNameFor(m => m.TenLoai):</strong> @Model.TenLoai</p>
-            <p><strong>Nhóm sản phẩm:</strong> @Model.TenNhom</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="md-card">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="p-3 bg-success-subtle rounded-4 me-3">
+                        <i class="fa-solid fa-folder-tree text-success fs-3"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">@Model.TenLoai</h4>
+                        <span class="text-muted small font-monospace text-uppercase">Phân loại ID: #@Model.MaLoai</span>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-12">
+                        <div class="p-4 bg-light rounded-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block mb-2">Thuộc nhóm danh mục</label>
+                            <div class="h5 fw-bold text-dark mb-0">
+                                <i class="fa-solid fa-layer-group me-2 text-success"></i>@Model.TenNhom
+                                <span class="bg-white border rounded px-2 py-1 ms-2 small font-monospace text-muted" style="font-size: 0.75rem;">ID @Model.MaNhom</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="opacity-10 my-4">
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="@Url.Action("Edit", "LoaiSP", new { id = Model.MaLoai })" class="btn btn-success px-4">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Chỉnh sửa
+                    </a>
+                    @if (Context.Session.GetString("IsAdmin") == "true")
+                    {
+                        <a href="@Url.Action("Delete", "LoaiSP", new { id = Model.MaLoai })" class="btn btn-outline-danger px-4">
+                            <i class="fa-solid fa-trash me-2"></i>Xóa mục này
+                        </a>
+                    }
+                    <a asp-action="Index" class="btn btn-light border px-4">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Quay lại
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-3 bg-light rounded-4 small text-muted text-center shadow-sm border border-white">
+                <i class="fa-solid fa-circle-info me-2 text-success"></i>Việc xóa loại sản phẩm có thể ảnh hưởng đến lịch sử báo cáo nếu có sản phẩm đang thuộc loại này.
+            </div>
+        </div>
     </div>
-
-   <div class=" mt-4">
-        <a class="btn btn-warning text-white me-2" href="@Url.Action("Edit", "LoaiSP", new { id = Model.MaLoai })">
-            <i class="fa-solid fa-pen-to-square"></i> Sửa
-        </a>
-        <a class="btn btn-danger me-2 text-white" href="@Url.Action("Delete", "LoaiSP", new { id = Model.MaLoai })">
-            <i class="fa-solid fa-trash"></i> Xóa
-        </a>
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-   </div>
 </div>

@@ -1,232 +1,101 @@
 ﻿@model QuanLyBanHang.Models.SanPhamDto
 
 @{
-    ViewBag.Title = "Sửa Sản phẩm";
+    ViewBag.Title = "Chỉnh sửa sản phẩm";
 }
 
-<style>
-    .form-section {
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e9ecef;
-    }
-
-    .section-title {
-        color: #ffc107;
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 2px solid #ffc107;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .form-label {
-        color: #495057;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-        border: 1.5px solid #dee2e6;
-        padding: 0.65rem 0.85rem;
-    }
-
-    .form-control:focus, .form-select:focus {
-        border-color: #ffc107;
-        box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.15);
-    }
-
-    .page-header {
-        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-        color: white;
-        padding: 1.5rem 2rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-    }
-</style>
-
-<div class="container-fluid">
-    <div class="page-header">
-        <h4>
-            <i class="fa-solid fa-edit"></i>
-            Sửa thông tin sản phẩm
-        </h4>
-    </div>
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "SanPham")" class="text-success text-decoration-none">Sản Phẩm</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "SanPham", new { id = Model.MaSP })" class="text-success text-decoration-none">@Model.MaSP</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+        </ol>
+    </nav>
 
     <form asp-action="Edit" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
-
         <input type="hidden" asp-for="MaSP" />
-        <input type="hidden" asp-for="AnhMH" />
+        
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="md-card">
+                    <h5 class="fw-bold mb-4">Cập nhật thông tin</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Tên sản phẩm</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-pen-to-square text-muted"></i></span>
+                            <input asp-for="TenSP" class="form-control border-0 bg-transparent" />
+                        </div>
+                        <span asp-validation-for="TenSP" class="text-danger small mt-1"></span>
+                    </div>
 
-        <!-- Thông tin cơ bản -->
-        <div class="form-section">
-            <div class="section-title">
-                <i class="fa-solid fa-info-circle"></i>
-                Thông tin cơ bản
-            </div>
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <label class="form-label">Mã sản phẩm</label>
-                    <input asp-for="MaSP" class="form-control" readonly />
-                </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small text-uppercase fw-bold text-muted">Giá bán niêm yết</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-money-bill-wave text-muted"></i></span>
+                                <input asp-for="GiaBan" class="form-control border-0 bg-transparent" type="number" step="1" />
+                                <span class="input-group-text bg-transparent border-0 text-muted small">₫</span>
+                            </div>
+                            <span asp-validation-for="GiaBan" class="text-danger small mt-1"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label small text-uppercase fw-bold text-muted">Loại sản phẩm</label>
+                            <div class="input-group border rounded-3 bg-light">
+                                <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-tags text-muted"></i></span>
+                                <select asp-for="MaLoai" asp-items="ViewBag.LoaiSP" class="form-select border-0 bg-transparent"></select>
+                            </div>
+                            <span asp-validation-for="MaLoai" class="text-danger small mt-1"></span>
+                        </div>
+                    </div>
 
-                <div class="col-md-6">
-                    <label class="form-label required-field">Tên sản phẩm</label>
-                    <input asp-for="TenSP" class="form-control" />
-                    <span asp-validation-for="TenSP" class="text-danger small"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label required-field">Giá bán</label>
-                    <input asp-for="GiaBan" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="GiaBan" class="text-danger small"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label required-field">Trọng lượng (gram)</label>
-                    <input asp-for="TrongLuong" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="TrongLuong" class="text-danger small"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label required-field">Trạng thái</label>
-                    <select asp-for="MaTT" asp-items="ViewBag.MaTT" class="form-select">
-                        <option value="">-- Chọn trạng thái --</option>
-                    </select>
-                    <span asp-validation-for="MaTT" class="text-danger small"></span>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label required-field">Mô tả sản phẩm</label>
-                    <textarea asp-for="MoTaSP" class="form-control" rows="4"></textarea>
-                    <span asp-validation-for="MoTaSP" class="text-danger small"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Phân loại -->
-        <div class="form-section">
-            <div class="section-title">
-                <i class="fa-solid fa-layer-group"></i>
-                Phân loại
-            </div>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label class="form-label required-field">Loại sản phẩm</label>
-                    <select asp-for="MaLoai" asp-items="ViewBag.LoaiSP" class="form-select">
-                        <option value="">-- Chọn loại sản phẩm --</option>
-                    </select>
-                    <span asp-validation-for="MaLoai" class="text-danger small"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label required-field">Hãng sản xuất</label>
-                    <select asp-for="MaHangSX" asp-items="ViewBag.MaHangSX" class="form-select">
-                        <option value="">-- Chọn hãng --</option>
-                    </select>
-                    <span asp-validation-for="MaHangSX" class="text-danger small"></span>
+                    <div class="mb-0">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Trạng thái kinh doanh</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-flag text-muted"></i></span>
+                            <select asp-for="MaTT" asp-items="ViewBag.MaTT" class="form-select border-0 bg-transparent"></select>
+                        </div>
+                        <span asp-validation-for="MaTT" class="text-danger small mt-1"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Thông tin chi tiết -->
-        <div class="form-section">
-            <div class="section-title">
-                <i class="fa-solid fa-file-lines"></i>
-                Thông tin chi tiết
-            </div>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label class="form-label required-field">Thành phần</label>
-                    <textarea asp-for="ThanhPhan" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="ThanhPhan" class="text-danger small"></span>
+            <div class="col-lg-4">
+                <div class="md-card bg-light border-0 mb-4">
+                    <h5 class="fw-bold mb-4">Xác nhận thay đổi</h5>
+                    <p class="text-muted small mb-4">Việc chỉnh sửa thông tin sẽ được áp dụng ngay lập tức cho các đơn hàng chưa thanh toán.</p>
+                    <div class="d-grid gap-3">
+                        <button type="submit" class="btn btn-success shadow-sm">
+                            <i class="fa-solid fa-cloud-arrow-up me-2"></i>Cập nhật thông tin
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaSP" class="btn btn-light border">
+                            <i class="fa-solid fa-xmark me-2"></i>Hủy chỉnh sửa
+                        </a>
+                    </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label required-field">Công dụng</label>
-                    <textarea asp-for="CongDung" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="CongDung" class="text-danger small"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label required-field">Hướng dẫn sử dụng</label>
-                    <textarea asp-for="HDSD" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="HDSD" class="text-danger small"></span>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label required-field">Hướng dẫn bảo quản</label>
-                    <textarea asp-for="HDBaoQuan" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="HDBaoQuan" class="text-danger small"></span>
+                <div class="md-card">
+                    <h6 class="fw-bold text-muted text-uppercase mb-3 small">Thông tin hệ thống</h6>
+                    <div class="small">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Mã định danh (ID):</span>
+                            <span class="font-monospace fw-bold">@Model.MaSP</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Tồn kho hiện tại:</span>
+                            <span class="badged @(Model.SoLuongTon > 0 ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger")">@Model.SoLuongTon</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Ảnh minh họa -->
-        <div class="form-section">
-            <div class="section-title">
-                <i class="fa-solid fa-image"></i>
-                Ảnh minh họa
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Ảnh hiện tại / xem trước:</label>
-                    <img id="previewImage"
-                         src="@(string.IsNullOrEmpty(Model?.AnhMH) ? "" : Url.Content("~/images/products" + Model.AnhMH))"
-                         alt="@Model.TenSP"
-                         style="max-width: 240px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: cover; background: #f8f9fa;" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Chọn ảnh mới:</label>
-                    <input type="file" name="AnhFile" id="AnhFile" class="form-control" accept="image/*" />
-                    <small class="text-muted d-block mt-2">
-                        <i class="fa-solid fa-info-circle"></i>
-                        Chấp nhận định dạng: JPG, PNG, GIF. Kích thước tối đa: 5MB
-                    </small>
-                </div>
-            </div>
-        </div>
-
-        <div class="d-flex gap-3 justify-content-end mb-4">
-            <a asp-action="Details" asp-route-id="@Model.MaSP" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left me-2"></i>
-                Quay lại
-            </a>
-            <button type="submit" class="btn btn-warning text-white">
-                <i class="fa-solid fa-save me-2"></i>
-                Cập nhật
-            </button>
         </div>
     </form>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        const fileInput = document.getElementById("AnhFile");
-        const previewImg = document.getElementById("previewImage");
-
-        if (fileInput && previewImg) {
-            fileInput.addEventListener("change", function (e) {
-                const file = e.target.files?.[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = function (ev) {
-                    previewImg.src = ev.target?.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-    </script>
 }

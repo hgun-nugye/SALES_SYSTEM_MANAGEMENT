@@ -1,0 +1,373 @@
+@model QuanLyBanHang.Models.BaoCaoViewModel
+
+@{
+    ViewBag.Title = "Báo cáo & Phân tích";
+}
+
+<style>
+
+    .md-card-header {
+        padding: 1.25rem 1.5rem;
+        background: transparent;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .md-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--md-primary);
+        display: flex;
+        align-items: center;
+    }
+
+    .md-card-body {
+        padding: 1.5rem;
+    }
+
+    .md-stat-card {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .md-stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+    }
+
+    .md-stat-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--md-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .md-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .bg-light-success { background-color: #e8f5e9; color: #2e7d32; }
+    .bg-light-primary { background-color: #e3f2fd; color: #1976d2; }
+    .bg-light-warning { background-color: #fff8e1; color: #ffa000; }
+    .bg-light-info { background-color: #e0f7fa; color: #0097a7; }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        border-top: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: var(--md-text-secondary);
+        padding: 1rem;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-color: #f1f1f1;
+    }
+
+    .md-btn-export {
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .list-group-item {
+        border-left: none;
+        border-right: none;
+        padding: 1rem 1.5rem;
+    }
+
+    .list-group-item:first-child { border-top: none; }
+</style>
+
+<div class="container py-4">
+    <!-- Header Area -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+        <div>
+         
+        </div>
+        
+        <div class="d-flex flex-wrap gap-2">
+            <form asp-action="Index" method="get" class="d-flex gap-2">
+                <select name="month" class="form-select border-0 shadow-sm" style="width: 150px; border-radius: 8px;">
+                    <option value="">Tất cả tháng</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i" selected="@(ViewBag.Month == i)">Tháng @i</option>
+                    }
+                </select>
+                <select name="year" class="form-select border-0 shadow-sm" style="width: 120px; border-radius: 8px;">
+                    @for (int i = DateTime.Now.Year; i >= 2020; i--)
+                    {
+                        <option value="@i" selected="@(ViewBag.Year == i)">Năm @i</option>
+                    }
+                </select>
+                <button type="submit" class="btn btn-white shadow-sm" style="border-radius: 8px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <a asp-action="ExportDoanhThu" asp-route-month="@ViewBag.Month" asp-route-year="@ViewBag.Year" class="btn btn-success md-btn-export shadow-sm">
+                <i class="fa-solid fa-file-export me-2"></i>Xuất
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="md-card h-100">
+                <div class="md-stat-card">
+                    <div class="md-icon-box bg-light-success">
+                        <i class="fa-solid fa-wallet fs-4"></i>
+                    </div>
+                    <span class="md-stat-label">Tổng doanh thu</span>
+                    <h3 class="md-stat-value text-success">@Model.TongDoanhThu.ToString("N0") ₫</h3>
+                    <div class="small text-muted mt-auto">Tổng giá trị đơn hàng bán ra</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="md-card h-100">
+                <div class="md-stat-card">
+                    <div class="md-icon-box bg-light-primary">
+                        <i class="fa-solid fa-shopping-cart fs-4"></i>
+                    </div>
+                    <span class="md-stat-label">Tổng đơn hàng</span>
+                    <h3 class="md-stat-value text-primary">@Model.TongDonHang</h3>
+                    <div class="small text-muted mt-auto">Số lượng giao dịch thành công</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="md-card h-100">
+                <div class="md-stat-card">
+                    <div class="md-icon-box bg-light-warning">
+                        <i class="fa-solid fa-bolt fs-4"></i>
+                    </div>
+                    <span class="md-stat-label">Đơn hàng trong ngày</span>
+                    <h3 class="md-stat-value text-warning">@Model.DoanhThuTheoThoiGian.Count(x => x.NgayBH.Date == DateTime.Today)</h3>
+                    <div class="small text-muted mt-auto">Số đơn phát sinh hôm nay</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="md-card h-100">
+                <div class="md-stat-card">
+                    <div class="md-icon-box bg-light-info">
+                        <i class="fa-solid fa-box-open fs-4"></i>
+                    </div>
+                    <span class="md-stat-label text-danger">Tồn kho cao nhất</span>
+                    <h3 class="md-stat-value text-info">@Model.SanPhamTonKhoNhieu.FirstOrDefault()?.SoLuongTon</h3>
+                    <div class="small text-muted mt-auto">Mặt hàng cần lưu ý: @Model.SanPhamTonKhoNhieu.FirstOrDefault()?.TenSP</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Main Chart -->
+        <div class="col-lg-8">
+            <div class="md-card h-100">
+                <div class="md-card-header">
+                    <h5 class="md-card-title"><i class="fa-solid fa-chart-area me-2"></i>Xu hướng doanh thu</h5>
+                    <span class="badged bg-light text-dark fw-normal px-3 py-2">Năm @ViewBag.Year</span>
+                </div>
+                <div class="md-card-body">
+                    <div style="height: 350px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="col-lg-4">
+            <div class="md-card h-100">
+                <div class="md-card-header">
+                    <h5 class="md-card-title"><i class="fa-solid fa-fire-flame-curved me-2"></i>Bán chạy nhất</h5>
+                </div>
+                <div class="md-card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in Model.TopSanPhamBanChay.Select((value, index) => new { value, index }))
+                        {
+                            <div class="list-group-item d-flex align-items-center gap-3">
+                                <span class="bg-light rounded-circle d-flex align-items-center justify-content-center fw-bold text-secondary" style="width: 32px; height: 32px; flex-shrink: 0;">
+                                    @(item.index + 1)
+                                </span>
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <div class="fw-bold text-truncate" title="@item.value.TenSP">@item.value.TenSP</div>
+                                    <div class="small text-secondary">Doanh thu: @item.value.DoanhThu.ToString("N0") ₫</div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badged bg-success-subtle text-success border border-success-subtle rounded-pill px-3">@item.value.SoLuongBan SP</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Inventory Management -->
+        <div class="col-xl-5">
+            <div class="md-card h-100">
+                <div class="md-card-header">
+                    <h5 class="md-card-title text-danger"><i class="fa-solid fa-warehouse me-2"></i>Tồn kho nhiều nhất</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-end">Đơn giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.SanPhamTonKhoNhieu)
+                            {
+                                <tr>
+                                    <td class="fw-medium">@item.TenSP</td>
+                                    <td class="text-center">
+                                        <span class="bg-info-subtle text-info rounded-pill px-3">@item.SoLuongTon</span>
+                                    </td>
+                                    <td class="text-end fw-bold">@item.GiaBan?.ToString("N0") ₫</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="col-xl-7">
+            <div class="md-card h-100">
+                <div class="md-card-header">
+                    <h5 class="md-card-title text-success"><i class="fa-solid fa-clock-rotate-left me-2"></i>Giao dịch vừa thực hiện</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Ngày bán</th>
+                                <th>Khách hàng</th>
+                                <th class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.DoanhThuTheoThoiGian.Take(8))
+                            {
+                                <tr>
+                                    <td><span class="badged bg-light text-dark font-monospace">@item.MaDBH</span></td>
+                                    <td class="text-muted">@item.NgayBH.ToString("dd/MM/yy HH:mm")</td>
+                                    <td class="fw-medium">@item.TenKH</td>
+                                    <td class="text-end text-success fw-bold">@item.TongTien.ToString("N0") ₫</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            
+            // Material Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+            gradient.addColorStop(0, 'rgba(46, 125, 50, 0.15)');
+            gradient.addColorStop(1, 'rgba(46, 125, 50, 0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.LabelsDoanhThu)),
+                    datasets: [{
+                        label: 'Doanh thu thực tế',
+                        data: @Html.Raw(Json.Serialize(Model.ValuesDoanhThu)),
+                        borderColor: '#2e7d32',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#2e7d32',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1a1a1a',
+                            padding: 12,
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 13 },
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Doanh thu: ' + new Intl.NumberFormat('vi-VN').format(context.parsed.y) + ' ₫';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#757575', font: { size: 11 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { borderDash: [5, 5], color: '#e0e0e0' },
+                            ticks: {
+                                color: '#757575',
+                                font: { size: 11 },
+                                callback: function(value) {
+                                    if (value >= 1000000) return (value / 1000000) + 'M';
+                                    if (value >= 1000) return (value / 1000) + 'K';
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

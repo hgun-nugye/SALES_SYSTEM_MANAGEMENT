@@ -48,40 +48,24 @@ namespace QuanLyBanHang.Services
 		public async Task Create(SanPham sp, string? filePath)
 		{
 			await _context.Database.ExecuteSqlRawAsync(
-				"EXEC SanPham_Insert @TenSP, @GiaBan, @MoTaSP, @AnhMH, @ThanhPhan, @CongDung, @HDSD, @HDBaoQuan, @TrongLuong, @MaTT, @MaLoai, @MaHangSX",
+				"EXEC SanPham_Insert @TenSP, @GiaBan, @MaTT, @MaLoai",
 				new SqlParameter("@TenSP", sp.TenSP),
 				new SqlParameter("@GiaBan", sp.GiaBan),
-				new SqlParameter("@MoTaSP", sp.MoTaSP),
-				new SqlParameter("@AnhMH", filePath ?? (object)DBNull.Value),
-				new SqlParameter("@ThanhPhan", sp.ThanhPhan),
-				new SqlParameter("@CongDung", sp.CongDung),
-				new SqlParameter("@HDSD", sp.HDSD),
-				new SqlParameter("@HDBaoQuan", sp.HDBaoQuan),
-				new SqlParameter("@TrongLuong", sp.TrongLuong),
 				new SqlParameter("@MaTT", sp.MaTT),
-				new SqlParameter("@MaLoai", sp.MaLoai),
-				new SqlParameter("@MaHangSX", sp.MaHangSX)
+				new SqlParameter("@MaLoai", sp.MaLoai)
 			);
 		}
 
 		// Cập nhật sản phẩm
-		public async Task Update(SanPham sp, string? filePath)
+		public async Task Update(SanPham sp)
 		{
 			await _context.Database.ExecuteSqlRawAsync(
-				"EXEC SanPham_Update @MaSP, @TenSP, @GiaBan, @MoTaSP, @AnhMH, @ThanhPhan, @CongDung, @HDSD, @HDBaoQuan, @TrongLuong, @MaTT, @MaLoai, @MaHangSX",
+				"EXEC SanPham_Update @MaSP, @TenSP, @GiaBan,@MaTT, @MaLoai",
 				new SqlParameter("@MaSP", sp.MaSP),
 				new SqlParameter("@TenSP", sp.TenSP),
 				new SqlParameter("@GiaBan", sp.GiaBan),
-				new SqlParameter("@MoTaSP", sp.MoTaSP),
-				new SqlParameter("@AnhMH", filePath ?? (object)DBNull.Value),
-				new SqlParameter("@ThanhPhan", sp.ThanhPhan),
-				new SqlParameter("@CongDung", sp.CongDung),
-				new SqlParameter("@HDSD", sp.HDSD),
-				new SqlParameter("@HDBaoQuan", sp.HDBaoQuan),
-				new SqlParameter("@TrongLuong", sp.TrongLuong),
 				new SqlParameter("@MaTT", sp.MaTT),
-				new SqlParameter("@MaLoai", sp.MaLoai),
-				new SqlParameter("@MaHangSX", sp.MaHangSX)
+				new SqlParameter("@MaLoai", sp.MaLoai)
 			);
 		}
 

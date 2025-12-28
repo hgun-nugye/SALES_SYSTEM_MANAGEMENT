@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class XaController : Controller
 	{
 		private readonly AppDbContext _context;
@@ -20,7 +23,7 @@ namespace QuanLyBanHang.Controllers
 
 
 		//READ - Danh sách Xã
-		public async Task<IActionResult> Index(string? search, string? tinh)
+		public async Task<IActionResult> Index(string? search, short? tinh)
 		{
 			ViewBag.Search = search;
 			ViewBag.Tinh = tinh;
@@ -34,7 +37,7 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		// DETAILS - Xem chi tiết
-		public async Task<IActionResult> Details(string id)
+		public async Task<IActionResult> Details(int id)
 		{
 			var xa = (await _xaService.GetByIDWithTinh(id));
 
@@ -57,6 +60,10 @@ namespace QuanLyBanHang.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(Xa model)
 		{
+			// Bỏ qua validation TenTinh vì nó là NotMapped và không binding từ form
+			ModelState.Remove("TenTinh");
+			ModelState.Remove("MaXa");
+
 			if (ModelState.IsValid)
 			{
 				try
@@ -82,9 +89,9 @@ namespace QuanLyBanHang.Controllers
 
 		// EDIT - GET
 		[HttpGet]
-		public async Task<IActionResult> Edit(string id)
+		public async Task<IActionResult> Edit(int id)
 		{
-			if (string.IsNullOrEmpty(id))
+			if (id <= 0)
 				return BadRequest();
 
 			var xa = (await _xaService.GetByIDWithTinh(id));
@@ -127,9 +134,10 @@ namespace QuanLyBanHang.Controllers
 
 		// DELETE - GET
 		[HttpGet]
-		public async Task<IActionResult> Delete(string id)
+		[NoDeleteForStaff]
+		public async Task<IActionResult> Delete(int id)
 		{
-			if (string.IsNullOrEmpty(id))
+			if (id <= 0)
 				return BadRequest();
 
 			var xa = (await _xaService.GetByIDWithTinh(id));
@@ -143,9 +151,10 @@ namespace QuanLyBanHang.Controllers
 		// DELETE - POST
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(string id)
+		[NoDeleteForStaff]
+		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			if (string.IsNullOrEmpty(id))
+			if (id <= 0)
 			{
 				TempData["ErrorMessage"] = "ID không hợp lệ!";
 				return BadRequest();

@@ -1,78 +1,83 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.CTMHDetailDto>
 
 @{
-    ViewBag.Title = "Chi tiết mua hàng";
+    ViewBag.Title = "Chi tiết nhập hàng";
+    var maDMH = ViewBag.MaDMH;
 }
-<div class="container">
-    <h4 class="mb-3 text-success">
-        <i class="fa-solid fa-list"></i> Chi tiết mua hàng
-    </h4>
 
-    <table class="table  table-hover align-middle text-center shadow-sm">
-        <thead class="table-light">
-            <tr>
-                <th><i class="fa-solid fa-hashtag"></i> Mã Đơn mua hàng</th>
-                <th><i class="fa-solid fa-hashtag"></i> Mã SP</th>
-                <th><i class="fa-solid fa-box"></i> Tên SP</th>
-                <th><i class="fa-solid fa-sort-numeric-up"></i> Số lượng</th>
-                <th><i class="fa-solid fa-money-bill"></i> Đơn giá</th>
-                <th><i class="fa-solid fa-gear"></i> Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "DonMuaHang")" class="text-success text-decoration-none">Đơn Mua Hàng</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "DonMuaHang", new { id = maDMH })" class="text-success text-decoration-none">@maDMH</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Hạng mục nhập</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-success mb-1">Cấu trúc đơn nhập hàng</h4>
+            <p class="text-muted small mb-0">Hạng mục sản phẩm thuộc đơn #@maDMH</p>
+        </div>
+        <a asp-action="Create" asp-route-maDMH="@maDMH" class="btn btn-success shadow-sm">
+            <i class="fa-solid fa-cart-plus me-1"></i>Bổ sung mặt hàng
+        </a>
+    </div>
+
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Sản Phẩm Nhập</th>
+                    <th class="text-center">Số Lượng</th>
+                    <th class="text-end">Đơn Giá Nhập</th>
+                    <th class="text-end pe-4">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-dark">@item.TenSP</div>
+                                <div class="small text-muted font-monospace">SKU: @item.MaSP</div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badged bg-light text-success border px-3">@item.SLM</span>
+                            </td>
+                            <td class="text-end font-monospace fw-bold">@item.DGM.ToString("N0") <small>₫</small></td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-maDMH="@item.MaDMH" asp-route-maSP="@item.MaSP" class="btn btn-sm btn-light text-warning" title="Sửa">
+                                        <i class="fa-solid fa-pen-nib"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-maDMH="@item.MaDMH" asp-route-maSP="@item.MaSP" class="btn btn-sm btn-light text-danger" title="Xóa">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@item.MaDMH</td>
-                        <td>@item.MaSP</td>
-                        <td>@item.TenSP</td>
-                        <td>@item.SLM</td>
-                        <td>@item.DGM.ToString("N")</td>
-                        <td class="d-flex justify-content-center gap-1">
-                            <a asp-action="Details" asp-route-maDMH="@item.MaDMH" asp-route-maSP="@item.MaSP" class="btn btn-info btn-sm text-white">
-                                <i class="fa-solid fa-eye"></i> Xem
-                            </a>
-                            <a asp-action="Edit" asp-route-maDMH="@item.MaDMH" asp-route-maSP="@item.MaSP" class="btn btn-warning btn-sm text-white">
-                                <i class="fa-solid fa-pen-to-square"></i> Sửa
-                            </a>
-                            <a asp-action="Delete" asp-route-maDMH="@item.MaDMH" asp-route-maSP="@item.MaSP" class="btn btn-danger btn-sm">
-                                <i class="fa-solid fa-trash"></i> Xóa
-                            </a>
+                        <td colspan="4" class="py-5 text-center text-muted">
+                            <i class="fa-solid fa-clipboard-list fs-1 d-block mb-3 opacity-25"></i>
+                            Chưa có thông tin sản phẩm nhập cho đơn này.
                         </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" class="text-muted fst-italic">Chưa có chi tiết sản phẩm nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Details", "DonMuaHang", new { id = maDMH })" class="btn btn-light border py-2 px-4 shadow-sm text-muted">
+            <i class="fa-solid fa-arrow-left me-2"></i>Quay lại đơn mua
+        </a>
+    </div>
 </div>
-
-<style>
-    i {
-        margin-right: 8px;
-    }
-
-    .btn i {
-        margin-right: 5px;
-    }
-
-    .table th {
-        vertical-align: middle;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f5faff;
-        transition: 0.2s;
-    }
-
-    .alert {
-        margin-top: 10px;
-    }
-</style>

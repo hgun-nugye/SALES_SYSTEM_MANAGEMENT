@@ -81,9 +81,7 @@ namespace QuanLyBanHang.Services
                     @DiaChiKH = {model.DiaChiKH},
 					@GioiTinh = {model.GioiTinh},
                     @AnhKH = {model.AnhKH},
-                    @MaXa = {model.MaXa},
-                    @TenDNKH = {model.TenDNKH},
-                    @MatKhauKH = {model.MatKhauKH}
+                    @MaXa = {model.MaXa}
             ");
 
 			return fileName;

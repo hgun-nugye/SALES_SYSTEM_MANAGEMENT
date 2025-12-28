@@ -1,44 +1,76 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.CTBHDetailDto>
 
 @{
-    ViewBag.Title = "Chi tiết sản phẩm trong đơn bán";
+    ViewBag.Title = "Thông tin chi tiết hạng mục";
     var item = Model.FirstOrDefault();
 }
 
 <div class="container">
-
-    <h4 class="text-success mb-3">
-        <i class="fa-solid fa-circle-info"></i> Chi tiết sản phẩm trong đơn
-    </h4>
-
     @if (item != null)
     {
-        <div class="card shadow-sm p-4">
-            <p><strong>Mã Đơn:</strong> @item.MaDBH</p>
-            <p><strong>Tên SP:</strong> @item.TenSP</p>
-            <p><strong>Số lượng:</strong> @item.SLB</p>
-            <p><strong>Đơn giá:</strong> @item.DGB.ToString("N0")</p>
-            <p><strong>Thành tiền:</strong> @((item.SLB * item.DGB).ToString("N0"))</p>
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "DonBanHang")" class="text-success text-decoration-none">Đơn Bán Hàng</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Details", "DonBanHang", new { id = item.MaDBH })" class="text-success text-decoration-none">@item.MaDBH</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@item.TenSP</li>
+            </ol>
+        </nav>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="md-card">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="p-3 bg-success-subtle rounded-circle text-success">
+                            <i class="fa-solid fa-box-open fs-2"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0">@item.TenSP</h4>
+                            <p class="text-muted mb-0">Hạng mục thuộc đơn hàng #@item.MaDBH</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4">
+                                <label class="small text-muted fw-bold text-uppercase d-block mb-1">Số lượng xuất</label>
+                                <div class="h4 fw-bold text-dark mb-0">@item.SLB <small class="text-muted fw-normal">Sản phẩm</small></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4">
+                                <label class="small text-muted fw-bold text-uppercase d-block mb-1">Đơn giá bán</label>
+                                <div class="h4 fw-bold text-success mb-0">@item.DGB.ToString("N0") <small>₫</small></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-success-subtle rounded-4 text-center mb-4">
+                        <label class="small text-success fw-bold text-uppercase d-block mb-1">Tổng cộng hạng mục</label>
+                        <div class="display-6 fw-bold text-success">@((item.SLB * item.DGB).ToString("N0")) ₫</div>
+                    </div>
+
+                    <hr class="opacity-10 mb-4">
+
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Edit", "DonBanHang", new { id = item.MaDBH })" class="btn btn-success py-2 fw-bold">
+                            <i class="fa-solid fa-pen-to-square me-2"></i>Chỉnh sửa hạng mục
+                        </a>
+                        <a asp-action="Index" asp-route-maDBH="@item.MaDBH" class="btn btn-light border py-2 text-muted fw-bold">
+                            Xem tất cả hạng mục
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     }
     else
     {
-        <p class="text-danger">Không tìm thấy dữ liệu.</p>
+        <div class="md-card text-center py-5">
+            <i class="fa-solid fa-magnifying-glass fs-1 text-muted mb-3 opacity-25"></i>
+            <h4>Không tìm thấy dữ liệu</h4>
+            <p class="text-muted">Hạng mục sản phẩm có thể đã bị gỡ bỏ khỏi đơn hàng.</p>
+            <a href="@Url.Action("Index", "DonBanHang")" class="btn btn-success mt-3">Quay lại danh sách đơn</a>
+        </div>
     }
-
-</div>
-
-<div class="mt-4">
-    
-    @if (item != null)
-    {
-        <a href="@Url.Action("Edit", "DonBanHang", new { id = item.MaDBH })"
-           class="btn btn-warning text-white">
-            <i class="fa-solid fa-pen-to-square"></i> Sửa
-        </a>
-    }
-
-    <a asp-action="Index" asp-route-maDBH="@item?.MaDBH" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left"></i> Quay lại
-    </a>
 </div>

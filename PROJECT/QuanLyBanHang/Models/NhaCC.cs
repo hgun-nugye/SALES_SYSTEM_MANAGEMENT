@@ -19,9 +19,9 @@ namespace QuanLyBanHang.Models
 		public string TenNCC { get; set; } = string.Empty;
 
 		[Required(ErrorMessage = "Số điện thoại không được để trống.")]
+		[StringLength(10, ErrorMessage = "Số điện thoại tối đa 10 ký tự.")]
 		[Display(Name = "Số Điện Thoại")]
-		[RegularExpression(@"^\d{10}$", ErrorMessage = "Số điện thoại phải gồm đúng 10 chữ số")]
-
+		[RegularExpression(@"^\d{10}$", ErrorMessage = "Số điện thoại phải gồm 10 chữ số")]
 		public string DienThoaiNCC { get; set; } = string.Empty;
 
 		[EmailAddress(ErrorMessage = "Email không hợp lệ.")]
@@ -36,7 +36,7 @@ namespace QuanLyBanHang.Models
 
 		[Required(ErrorMessage = "Mã xã không được để trống.")]
 		[Display(Name = "Mã Xã")]
-		public short MaXa { get; set; }
+		public int MaXa { get; set; }
 
 		[NotMapped]
 		[Display(Name = "Tên Xã")]
@@ -44,7 +44,7 @@ namespace QuanLyBanHang.Models
 
 		[NotMapped]
 		[Display(Name = "Mã Tỉnh")]
-		public short? MaTinh { get; set; }
+		public int? MaTinh { get; set; }
 
 		[NotMapped]
 		[Display(Name = "Tên Tỉnh")]
@@ -70,12 +70,12 @@ namespace QuanLyBanHang.Models
 		public string? DiaChiNCC { get; set; }
 
 		[Display(Name = "Mã Xã")]
-		public short MaXa { get; set; }
+	public int MaXa { get; set; }
 
-		[Display(Name = "Tên Xã")]
-		public string? TenXa { get; set; }
+	[Display(Name = "Tên Xã")]
+	public string? TenXa { get; set; }
 
-		[Display(Name = "Tên Tỉnh")]
-		public string? TenTinh { get; set; }
+	[Display(Name = "Tên Tỉnh")]
+	public string? TenTinh { get; set; }
 	}
 }

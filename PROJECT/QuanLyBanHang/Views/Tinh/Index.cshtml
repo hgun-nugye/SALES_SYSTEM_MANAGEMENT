@@ -1,103 +1,91 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.Tinh>
 
 @{
-    ViewBag.Title = "Quản lý Tỉnh";
+    ViewBag.Title = "Quản lý địa giới - Tỉnh / Thành";
 }
 
-<style>
-    .search-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-    }
-
-        .search-wrapper input {
-            padding-left: 38px !important;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-
-        .search-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-    .table {
-        overflow-x: auto;
-        white-space: nowrap;
-        width: 100%;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f5faff;
-        transition: 0.2s;
-    }
-</style>
-
 <div class="container">
-    <h4 class="mb-3 text-success">
-        Danh sách Tỉnh
-    </h4>
-
-    @* Form  *@
-    <form id="Form" class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
-              <div class="search-wrapper" style="max-width: 350px; position: relative;">
-            <i class="fa fa-search" style="
-            position: absolute; left: 12px; top: 50%;
-            transform: translateY(-50%); color: #777;
-        "></i>
-
-            <input id="searchBox" name="search" type="text" class="form-control"
-                   value="@ViewBag.Search"
-                   placeholder="Tìm mã tỉnh, tên tỉnh..."
-                   style="padding-left: 35px;">
-
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+          
         </div>
-
-        <div class="d-flex flex-wrap align-items-center gap-2">           
-            <button type="button" id="btnClear" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i>Reset</button>
-            <a href="@Url.Action("Create", "Tinh")" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i> Add</a>
+        
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index", "Xa")" class="btn btn-outline-success shadow-sm">
+                <i class="fa-solid fa-location-crosshairs me-2"></i>Danh sách Xã/Phường
+            </a>
+            <a href="@Url.Action("Create", "Tinh")" class="btn btn-success shadow-sm">
+                <i class="fa-solid fa-city me-2"></i>Thêm Tỉnh mới
+            </a>
         </div>
-    </form>
+    </div>
 
+    <!-- Filter Card -->
+    <div class="md-card mb-4 bg-light border-0">
+        <form id="filterForm" method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted text-uppercase">Tìm kiếm Tỉnh / Thành phố</label>
+                <div class="input-group bg-white border rounded-3 overflow-hidden">
+                    <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-magnifying-glass opacity-50"></i></span>
+                    <input id="searchBox" name="search" type="text" value="@ViewBag.Search" class="form-control border-0" placeholder="Ví dụ: Hà Nội, TP.HCM, Đà Nẵng...">
+                </div>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <button type="button" id="btnReset" class="btn btn-light border px-4">
+                    <i class="fa-solid fa-rotate-left me-2"></i>Reset
+                </button>
+            </div>
+        </form>
+    </div>
 
-    <div class="table">
-        <table class="table table-bordered table-hover align-middle text-center shadow-sm">
-            <thead class="table-success">
+    <!-- Data Table -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead>
                 <tr>
-                    <th class="w-25">Mã Tỉnh</th>
-                    <th class="w-25">Tên Tỉnh</th>
+                    <th class="ps-4" style="width: 20%">Mã Vùng</th>
+                    <th>Tên Tỉnh / Thành Phố</th>
                 </tr>
             </thead>
-            <tbody class="text-start">
-                @foreach (var item in Model)
+            <tbody>
+                @if (Model != null && Model.Any())
                 {
-                    <tr class="clickable-row"
-                        data-href="@Url.Action("Details", "Tinh", new { id = item.MaTinh })"
-                        data-matinh="@item.MaTinh"
-                        data-tentinh="@item.TenTinh">
-
-                        <td class=" text-center">@item.MaTinh</td>
-                        <td class="text-center">@item.TenTinh</td>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="cursor: pointer" onclick="window.location='@Url.Action("Details", "Tinh", new { id = item.MaTinh })'">
+                            <td class="ps-4">
+                                <span class="badged bg-light text-dark font-monospace border">#@item.MaTinh</span>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark fs-6">@item.TenTinh</div>
+                            </td>
+                           
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="py-5 text-center text-muted">
+                            <i class="fa-solid fa-earth-asia fs-1 d-block mb-3 opacity-25"></i>
+                            Không có dữ liệu tỉnh thành nào.
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
-
-        <div class="d-flex justify-content-end">
-            <a asp-action="Index" asp-controller="Xa" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left"></i> Quay lại
-            </a>
-        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // debounce function
+        const filterForm = document.getElementById('filterForm');
+        document.getElementById('searchBox').addEventListener('input', debounce(() => filterForm.submit(), 500));
+        document.getElementById('btnReset').addEventListener('click', () => {
+            window.location.href = '@Url.Action("Index", "Tinh")';
+        });
+
         function debounce(fn, delay) {
             let timer = null;
             return function() {
@@ -106,26 +94,5 @@
                 timer = setTimeout(() => fn.apply(context, args), delay);
             };
         }
-
-        // áp dụng cho searchBox
-        $("#searchBox").on("change", debounce(function() {
-            $("#Form").submit();
-        }, 400));
-
-        // clear
-        $("#btnClear").on("click", function () {
-            $("#searchBox").val("");
-            $("#Form").submit();
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".clickable-row").forEach(row => {
-                row.addEventListener("click", function () {
-                    window.location = this.dataset.href;
-                });
-            });
-        });
     </script>
 }

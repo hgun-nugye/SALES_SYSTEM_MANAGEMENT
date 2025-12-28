@@ -1,40 +1,76 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.CTMHDetailDto>
 
-
 @{
-    ViewBag.Title = "Chi tiết chi tiết mua hàng";
-    var item = @Model.FirstOrDefault();
+    ViewBag.Title = "Chi tiết hạng mục nhập hàng";
+    var item = Model.FirstOrDefault();
 }
 
-<div class=" container">
-    <h4 class="mb-3 text-success">
-        <i class="fa-solid fa-eye"></i> Chi tiết mua hàng - Đơn: @item.MaDMH
-    </h4>
+<div class="container">
+    @if (item != null)
+    {
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "DonMuaHang")" class="text-success text-decoration-none">Đơn Mua Hàng</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("Details", "DonMuaHang", new { id = item.MaDMH })" class="text-success text-decoration-none">@item.MaDMH</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@item.TenSP</li>
+            </ol>
+        </nav>
 
-    <div class="card shadow-sm p-4 mb-3">
-        <dl class="row">
-            <dt class="col-sm-3">Mã sản phẩm</dt>
-            <dd class="col-sm-9">@item.MaSP</dd>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="md-card">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="p-3 bg-primary-subtle rounded-circle text-primary">
+                            <i class="fa-solid fa-truck-ramp-box fs-2"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0">@item.TenSP</h4>
+                            <p class="text-muted mb-0">Chi tiết nhập hàng cho đơn #@item.MaDMH</p>
+                        </div>
+                    </div>
 
-            <dt class="col-sm-3">Tên sản phẩm</dt>
-            <dd class="col-sm-9">@item.TenSP</dd>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 border-start border-4 border-primary">
+                                <label class="small text-muted fw-bold text-uppercase d-block mb-1">Số lượng nhập</label>
+                                <div class="h4 fw-bold text-dark mb-0">@item.SLM <small class="text-muted fw-normal">Đơn vị</small></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-4 border-start border-4 border-primary">
+                                <label class="small text-muted fw-bold text-uppercase d-block mb-1">Đơn giá nhập</label>
+                                <div class="h4 fw-bold text-dark mb-0">@item.DGM.ToString("N0") <small>₫</small></div>
+                            </div>
+                        </div>
+                    </div>
 
-            <dt class="col-sm-3">Số lượng</dt>
-            <dd class="col-sm-9">@item.SLM</dd>
+                    <div class="p-4 bg-light rounded-4 text-center mb-4 border">
+                        <label class="small text-muted fw-bold text-uppercase d-block mb-1">Ước tính giá trị hạng mục</label>
+                        <div class="h3 fw-bold text-primary mb-0">@((item.SLM * item.DGM).ToString("N0")) ₫</div>
+                    </div>
 
-            <dt class="col-sm-3">Đơn giá</dt>
-            <dd class="col-sm-9">@item.DGM.ToString("N")</dd>
-        </dl>
-    </div>
-  
-</div>
+                    <hr class="opacity-10 mb-4">
 
-<div class="mt-4">
-    <a asp-action="Edit" asp-route-maDMH="@item.MaDMH" asp-route-maSP="@item.MaSP" class="btn btn-warning">
-        <i class="fa-solid fa-pen-to-square"></i> Sửa
-    </a>
-    <a asp-action="Index" asp-route-maDMH="@item.MaDMH" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left"></i> Quay lại
-    </a>
-
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Edit", "DonMuaHang", new { id = item.MaDMH })" class="btn btn-success py-2 fw-bold shadow-sm">
+                            <i class="fa-solid fa-pen-nib me-2"></i>Chỉnh sửa thông tin nhập
+                        </a>
+                        <a asp-action="Index" asp-route-maDMH="@item.MaDMH" class="btn btn-light border py-2 text-muted fw-bold">
+                            Quay lại danh sách hạng mục
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="md-card text-center py-5">
+            <i class="fa-solid fa-database fs-1 text-muted mb-3 opacity-25"></i>
+            <h4>Dữ liệu không khả dụng</h4>
+            <p class="text-muted">Bản ghi chi tiết nhập hàng này không còn tồn tại.</p>
+            <a href="@Url.Action("Index", "DonMuaHang")" class="btn btn-success mt-3">Quay lại danh sách nhập</a>
+        </div>
+    }
 </div>

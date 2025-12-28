@@ -18,170 +18,214 @@
 
     @* //font *@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
     @* //bootstrap js *@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <style>
+        :root {
+            --md-primary: #1b5e20; /* Material Green 900 */
+            --md-primary-light: #4c8c4a;
+            --md-accent: #ffd600;
+            --md-surface: #ffffff;
+            --md-background: #f8f9fa;
+            --md-text-main: #212121;
+            --md-text-muted: #757575;
+            --md-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --md-shadow-lg: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            --sidebar-width: 280px;
+        }
+
         body {
             display: flex;
-            font-family: "Segoe UI", sans-serif;
-            min-height: 100%;
-            background-color: #fffef4;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            background-color: var(--md-background);
+            color: var(--md-text-main);
+            margin: 0;
         }
-        .text-success{
-            color: #198754 !important;
-        }
-        
+
         /* Sidebar */
         .sidebar {
-            width: 250px;
+            width: var(--sidebar-width);
             height: 100vh;
-            background: #fffffa;
-            color: #198754;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            font-weight: bolder;
+            background: #ffffff;
+            color: var(--md-primary);
             position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            border-right: 1px solid rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
-            overflow-x: hidden;
-            scrollbar-width: none;
-            scrollbar-color: #198754 #f0f0f0;
+            transition: all 0.3s ease;
         }
 
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
+        .sidebar-brand {
+            padding: 24px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--md-primary);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: #f0f0f0;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background-color: #198754;
-            border-radius: 3px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background-color: #157347;
-        }
-        
-        .sidebar a {
-                display: flex;
-                align-items: center;
-                color: #198754;
-                padding: 14px 20px;
-                text-decoration: none;
-                font-size: 15px;
-                transition: 0.2s;
-                font-size: 16px;
-                font-weight:bold;
-            }
-            
-        .sidebar a i {
-                    width: 22px;
-                    text-align: center;
-                }
-        
-                .sidebar a:hover {
-                    background: #42c74685;
-                    color: #198754;
-                    border-radius: 4px;
-                }
-
-                    .sidebar a:hover i {
-                        color: #198754;
-                    }
-
-                .sidebar a.active {
-                    background: #198754;
-                    color: #fff;
-                    border-radius: 4px;
-                }
-
-                    .sidebar a.active i {
-                        color: #FFFFE0;
-                    }
 
         .menu-label {
-            color: #6c757d;
-            font-size: 11px;
+            padding: 24px 24px 8px;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 12px 20px 8px 20px;
-            margin-top: 8px;
-            border-top: 1px solid #e9ecef;
+            letter-spacing: 1.2px;
+            color: var(--md-text-muted);
         }
 
-        .menu-label:first-of-type {
-            border-top: none;
-            margin-top: 0;
-        }
-
-        .content {
-            margin-left: 250px;
-            width: calc(100% - 250px);
-            font-size: 16px;
-            min-height: 100vh;
-        }
-
-        .main{
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #424242;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin: 4px 12px;
             border-radius: 12px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            gap: 12px;
         }
 
-        .page-link{
-            border: 1px solid #198754 !important;
-            color: #198754 !important;
+        .sidebar a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            opacity: 0.7;
         }
 
-        .page-item.active .page-link{
-            background-color: #198754 !important;
-            color: white !important;           
+        .sidebar a:hover {
+            background-color: #f1f8e9;
+            color: var(--md-primary);
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #28a745 !important;
-            box-shadow: 0 0 0 0.25rem rgba(40,167,69,0.25) !important;
+        .sidebar a.active {
+            background-color: var(--md-primary);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(27, 94, 32, 0.25);
         }
 
-        .table {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* mượt trên mobile */
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: #28a745 transparent; /* Firefox */
+        .sidebar a.active i {
+            opacity: 1;
         }
 
-            /* Chrome, Edge, Safari */
-            .table::-webkit-scrollbar {
-                height: 8px; /* chiều cao thanh scroll */
-            }
-
-            .table::-webkit-scrollbar-track {
-                background: transparent;
-            }
-
-            .table::-webkit-scrollbar-thumb {
-                background-color: #28a745;
-                border-radius: 4px;
-            }
-
-                .table::-webkit-scrollbar-thumb:hover {
-                    background-color: #28a745;
-                }
-
-        .search-wrapper i{
-            color: #198754 !important;
+        /* Content */
+        .content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--md-background);
         }
 
-        label{
-            font-weight: bold;
+        .top-navbar {
+            background: #ffffff;
+            padding: 12px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .main {
+            padding: 32px;
+            background-color: transparent;
+            box-shadow: none;
+            border-radius: 0;
+            flex-grow: 1;
+        }
+
+        /* Material Components */
+        .md-card {
+            background: var(--md-surface);
+            border-radius: 16px;
+            box-shadow: var(--md-shadow);
+            border: none;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .md-card:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+        }
+
+        .btn-success {
+            background-color: var(--md-primary);
+            border-color: var(--md-primary);
+        }
+
+        .btn-success:hover {
+            background-color: #2e7d32;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            background-color: #fafafa;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #ffffff;
+            border-color: var(--md-primary);
+            box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.1);
+        }
+
+        .table-responsive {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--md-shadow);
+        }
+
+        .table thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #f1f1f1;
+            color: var(--md-text-muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 16px 24px;
+        }
+
+        .table td {
+            padding: 16px 24px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .badged {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
         }
 
     </style>
@@ -190,11 +234,12 @@
 <body>
 
     <!-- SIDEBAR -->
-    <div class="sidebar shadow-lg">
-        <div class="pb-3 text-center">
-            <img src="~/images/logo.png" class="rounded-circle w-50 text-center mb-2" />           
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-store"></i>
+            <span>Canteen K8</span>
         </div>
-
+        
         @{
             var ctrl = ViewContext.RouteData.Values["controller"]?.ToString();
             bool isCustomer = ViewBag.IsCustomer == true;
@@ -204,47 +249,49 @@
         {           
             <!-- Hàng hóa -->
             <div class="menu-label">Hàng hóa</div>
-            <a href="@Url.Action("Index", "SanPham")" class="ajax-link @(ctrl == "SanPham" ? "active" : "")">
-                <i class="fa-solid fa-box me-2"></i>Sản Phẩm
+            <a href="@Url.Action("Index", "SanPham")" class="ajax-link @(ctrl == "SanPham" || ctrl == "TrangThai" ? "active" : "")">
+                <i class="fa-solid fa-box"></i>Sản Phẩm
             </a>
-            <a href="@Url.Action("Index", "LoaiSP")" class="ajax-link @(ctrl == "LoaiSP" ? "active" : "")">
-                <i class="fa-solid fa-tags me-2"></i>Loại Sản Phẩm
-            </a>
-            <!-- Thông tin cơ bản -->
-            <div class="menu-label">Thông tin cơ bản</div>
-            <a href="@Url.Action("Index", "HangSX")" class="ajax-link @(ctrl == "HangSX" ? "active" : "")">
-                <i class="fa-solid fa-box me-2"></i>Hãng sản xuất
-            </a>
-
-            <a href="@Url.Action("Index", "Nuoc")" class="ajax-link @(ctrl == "Nuoc" ? "active" : "")">
-                <i class="fa-solid fa-flag me-2"></i>Nước
-            </a>
+            <a href="@Url.Action("Index", "LoaiSP")" class="ajax-link @(ctrl == "LoaiSP" || ctrl == "NhomSP" ? "active" : "")">
+                <i class="fa-solid fa-tags"></i>Loại Sản Phẩm
+            </a>           
 
             <!-- Khách hàng & Đối tác -->
-            <div class="menu-label">Khách hàng & Đối tác</div>
+            <div class="menu-label">Cung ứng</div>
             <a href="@Url.Action("Index", "KhachHang")" class="ajax-link @(ctrl == "KhachHang" ? "active" : "")">
-                <i class="fa-solid fa-users me-2"></i>Khách Hàng
+                <i class="fa-solid fa-users"></i>Khách Hàng
             </a>
             <a href="@Url.Action("Index", "NhaCC")" class="ajax-link @(ctrl == "NhaCC" ? "active" : "")">
-                <i class="fa-solid fa-truck me-2"></i>Nhà Cung Cấp
+                <i class="fa-solid fa-truck"></i>Nhà Cung Cấp
             </a>
-            <a href="@Url.Action("Index", "NhanVien")" class="ajax-link @(ctrl == "NhanVien" ? "active" : "")">
-                <i class="fa-solid fa-user-tie me-2"></i>Nhân Viên
-            </a>
-
+           
             <!-- Giao dịch -->
             <div class="menu-label">Giao dịch</div>
             <a href="@Url.Action("Index", "DonBanHang")" class="ajax-link @(ctrl == "DonBanHang" ? "active" : "")">
-                <i class="fa-solid fa-shopping-cart me-2"></i>Đơn Bán Hàng
+                <i class="fa-solid fa-cart-shopping"></i>Đơn Bán Hàng
             </a>
             <a href="@Url.Action("Index", "DonMuaHang")" class="ajax-link @(ctrl == "DonMuaHang" ? "active" : "")">
-                <i class="fa-solid fa-shopping-bag me-2"></i>Đơn Mua Hàng
+                <i class="fa-solid fa-basket-shopping"></i>Đơn Mua Hàng
             </a>
 
+            @if (Context.Session.GetString("IsAdmin") == "true")
+            {
+                <!-- Phân tích -->
+                <div class="menu-label">Phân tích</div>
+                <a href="@Url.Action("Index", "BaoCao")" class="ajax-link @(ctrl == "BaoCao" ? "active" : "")">
+                    <i class="fa-solid fa-chart-line"></i>Báo cáo doanh thu
+                </a>
+
+                <div class="menu-label">Hệ thống</div>
+                <a href="@Url.Action("Index", "TaiKhoan")" class="ajax-link @(ctrl == "TaiKhoan" ? "active" : "")">
+                    <i class="fa-solid fa-user-gear"></i>Quản lý tài khoản
+                </a>
+            }
+
             <!-- Địa lý -->
-            <div class="menu-label">Đơn vị hành chính</div>
-            <a href="@Url.Action("Index", "Xa")" class="ajax-link @(ctrl == "Xa" ? "active" : "")">
-                <i class="fa-solid fa-map-location-dot me-2"></i>Xã / Phường
+            <div class="menu-label">Địa lý</div>
+            <a href="@Url.Action("Index", "Xa")" class="ajax-link @(ctrl == "Xa" || ctrl == "Tinh" ? "active" : "")">
+                <i class="fa-solid fa-location-dot"></i>Đơn vị hành chính
             </a>
         }
         else
@@ -252,62 +299,53 @@
             <!-- Menu rút gọn cho Khách hàng -->
             <div class="menu-label">Khách hàng</div>
             <a href="@Url.Action("Index", "SanPham")" class="ajax-link @(ctrl == "SanPham" ? "active" : "")">
-                <i class="fa-solid fa-box me-2"></i>Xem sản phẩm
+                <i class="fa-solid fa-box"></i>Xem sản phẩm
             </a>
             <a href="@Url.Action("Index", "DonBanHang")" class="ajax-link @(ctrl == "DonBanHang" ? "active" : "")">
-                <i class="fa-solid fa-shopping-cart me-2"></i>Đơn mua hàng
+                <i class="fa-solid fa-shopping-cart"></i>Đơn mua hàng
             </a>
         }
     </div>
 
     <!-- CONTENT -->
-    <div class="content p-4 d-flex flex-column">
-
-        <!-- Header với thông tin người dùng và nút đăng xuất -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
+    <div class="content">
+        <!-- TOP NAVBAR -->
+        <header class="top-navbar">
+            <div class="d-flex align-items-center">
+                <h5 class="m-0 fw-bold" style="color:  #1b5e20">@ViewData["Title"]</h5>
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
                 @{                    
                     string userName = Context.Session.GetString("UserName");
-                    string userAvatar = Context.Session.GetString("UserAvatar"); // Lấy tên file ảnh từ Session
-
-                    // Xác định thư mục chứa ảnh dựa trên loại người dùng
+                    string userAvatar = Context.Session.GetString("UserAvatar");
                     string folder = isCustomer ? "customers" : "employees";
-
-                    // Tạo đường dẫn ảnh hoàn chỉnh
                     string avatarPath = string.IsNullOrEmpty(userAvatar)
-                    ? Url.Content("~/images/default-user.png")
-                    : Url.Content($"~/images/{folder}/{userAvatar}");
+                        ? Url.Content("~/images/default-user.png")
+                        : Url.Content($"~/images/{folder}/{userAvatar}");
                 }
 
-                <h5 class="mb-0 d-flex align-items-center gap-2">
-                    <img src="@avatarPath"
-                         width="40"
-                         height="40"
-                         style="object-fit:cover; border-radius:50%; border: 1px solid #ddd;">
+                <div class="user-profile d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-md-block">
+                        <div class="fw-bold lh-1">@userName</div>
+                        <small class="text-muted">@(Context.Session.GetString("IsAdmin") == "true" ? "Administrator" : "Staff")</small>
+                    </div>
+                    <div class="avatar-wrapper shadow-sm rounded-circle p-1 bg-white">
+                        <img src="@avatarPath" width="40" height="40" class="rounded-circle" style="object-fit: cover;">
+                    </div>
+                </div>
 
-                    @if (isCustomer)
-                    {
-                        <span class="text-info">Khách hàng: </span>
-                    }
-                    else
-                    {
-                        <span class="text-success">Nhân viên: </span>
-                    }
-                    <strong>@userName</strong>
-                </h5>
-            </div>
-            <div>
-                <a class="dropdown-item text-danger btn btn-danger" href="javascript:void(0)" onclick="confirmLogout()">
-                    <i class="fa-solid fa-sign-out-alt me-2"></i>Đăng xuất
+                <a class="btn btn-light text-danger border-0" href="javascript:void(0)" onclick="confirmLogout()" title="Đăng xuất">
+                    <i class="fa-solid fa-power-off"></i>
                 </a>
 
                 <form id="logoutForm" action="@Url.Action("LogoutConfirmed", "Home")" method="post" style="display:none;">
                     @Html.AntiForgeryToken()
                 </form>
             </div>
-        </div>
+        </header>
 
-        <main role="main" id="main-content" class="p-4 mb-4 flex-grow-1 main">
+        <main role="main" id="main-content" class="main">
             @RenderBody()
         </main>
 
@@ -376,69 +414,6 @@
             });
         </script>
     }
-
-
-    @* <script>
-                $(document).ready(function () {
-            // Xử lý click menu sidebar
-            $(document).on('click', '.ajax-link', function (e) {
-                var url = $(this).attr('href');
-                if (url === "#" || !url || url.includes("Logout")) return;
-
-                e.preventDefault();
-                var $this = $(this);
-
-                loadAjaxContent(url, $this);
-            });
-
-            // Xử lý click vào dòng trong table
-            $(document).on('click', '.clickable-row', function (e) {
-                if ($(e.target).closest('a, button, input').length) return;
-                var url = $(this).data('href');
-                if (url) loadAjaxContent(url);
-            });
-
-            // Hàm dùng chung để load nội dung
-            function loadAjaxContent(url, $menuElement) {
-                $('#main-content').css('opacity', '0.5');
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
-                    success: function (data) {
-                        // Cập nhật vùng nội dung
-                        $('#main-content').html(data).css('opacity', '1');
-
-                        // Cập nhật trạng thái Active trên Sidebar
-                        if ($menuElement) {
-                            $('.sidebar a').removeClass('active');
-                            $menuElement.addClass('active');
-                        }
-
-                        // Đổi URL trên trình duyệt mà không reload
-                        window.history.pushState({ path: url }, '', url);
-                        window.scrollTo(0, 0);
-                    },
-                    error: function () {
-                        $('#main-content').css('opacity', '1');
-                        Swal.fire('Lỗi!', 'Không thể tải nội dung.', 'error');
-                    }
-                });
-            }
-
-                   // Xử lý nút Back/Forward của trình duyệt mà không reload
-        window.onpopstate = function (event) {
-            // Lấy URL từ lịch sử trình duyệt
-            var url = location.pathname + location.search;
-
-            // Thay vì reload(), ta gọi hàm load nội dung AJAX
-            if (url) {
-                loadAjaxContent(url);
-            }
-        };
-        });
-    </script> *@
 
     <script>
         function confirmLogout() {

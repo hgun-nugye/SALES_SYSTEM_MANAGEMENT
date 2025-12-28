@@ -1,48 +1,78 @@
 ﻿@model QuanLyBanHang.Models.KhachHangDetailView
 @{
-    ViewBag.Title = "Chi tiết Khách hàng";
+    ViewBag.Title = "Hồ sơ Khách hàng";
 }
 
 <div class="container">
-    <h4 class="text-success mb-3">
-        Chi tiết Khách hàng
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "KhachHang")" class="text-success text-decoration-none">Khách Hàng</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.MaKH</li>
+        </ol>
+    </nav>
 
-    <div class="border p-4 rounded shadow-sm bg-light">
-        <div class="row">
-            <!-- Ảnh minh họa -->
-            <div class="col-md-5 text-center">
-                <img src="@(string.IsNullOrEmpty(Model.AnhKH) ? Url.Content("~/images/default-user.png") : @Url.Content("~/images/customers/" + Model.AnhKH))" class="img-fluid rounded"
-                     style="max-height: 400px; object-fit: contain;" />
+    <div class="row g-4">
+        <!-- Profile Sidebar -->
+        <div class="col-lg-4">
+            <div class="md-card text-center">
+                <div class="avatar-large-wrapper mb-4">
+                    <img src="@(string.IsNullOrEmpty(Model.AnhKH) ? Url.Content("~/images/default-user.png") : Url.Content("~/images/customers/" + Model.AnhKH))" 
+                         class="rounded-circle shadow-sm border" style="width: 160px; height: 160px; object-fit: cover;">
+                </div>
+                <h4 class="fw-bold mb-1">@Model.TenKH</h4>
+                <p class="text-muted font-monospace small mb-4">ID: @Model.MaKH</p>
+                
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Edit", "KhachHang", new { id = Model.MaKH })" class="btn btn-success">
+                        <i class="fa-solid fa-user-pen me-2"></i>Chỉnh sửa hồ sơ
+                    </a>
+                    @if (Context.Session.GetString("IsAdmin") == "true")
+                    {
+                        <a href="@Url.Action("Delete", "KhachHang", new { id = Model.MaKH })" class="btn btn-outline-danger">
+                            <i class="fa-solid fa-user-minus me-2"></i>Xóa khách hàng
+                        </a>
+                    }
+                </div>
             </div>
+        </div>
 
-            <!-- Thông tin sản phẩm -->
-            <div class="col-md-7">
-                <div class="p-3">
-                    <h4 class="text-primary mb-3">@Model.TenKH</h4>
-                    <p><strong>@Html.DisplayNameFor(m => m.MaKH):</strong> @Model.MaKH</p>
-
-                    <div class="row mt-3">
-                        <p><strong>@Html.DisplayNameFor(m => m.DienThoaiKH):</strong> @Model.DienThoaiKH</p>
-                        <p><strong>@Html.DisplayNameFor(m => m.EmailKH):</strong> @Model.EmailKH</p>
-                        <p><strong>@Html.DisplayNameFor(m => m.DiaChiKH):</strong> @Model.DiaChiKH, @Model.TenXa, @Model.TenTinh</p>
+        <!-- Details Info -->
+        <div class="col-lg-8">
+            <div class="md-card h-100">
+                <h5 class="fw-bold mb-4">Thông tin liên lạc & Địa chỉ</h5>
+                
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block mb-1">Số điện thoại</label>
+                            <div class="h5 fw-bold mb-0 text-dark"><i class="fa-solid fa-phone me-2 text-success"></i>@Model.DienThoaiKH</div>
+                        </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block mb-1">Địa chỉ Email</label>
+                            <div class="h5 fw-bold mb-0 text-dark"><i class="fa-solid fa-envelope me-2 text-success"></i>@Model.EmailKH</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-light rounded-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block mb-1">Địa chỉ thường trú</label>
+                            <div class="h5 fw-medium mb-0 text-dark">
+                                <i class="fa-solid fa-location-dot me-2 text-success"></i> @Model.DiaChiKH, @Model.TenXa, @Model.TenTinh
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="opacity-10 my-4">
+
+                <h5 class="fw-bold mb-4">Giao dịch gần đây</h5>
+                <div class="p-4 bg-light rounded-4 text-center">
+                    <i class="fa-solid fa-receipt fs-1 mb-3 opacity-25"></i>
+                    <p class="text-muted mb-0">Chưa ghi nhận lịch sử giao dịch mua hàng trực tuyến.</p>
                 </div>
             </div>
         </div>
     </div>
-
-   <div class=" mt-4">
-       
-        <a class="btn btn-warning text-white me-2" href="@Url.Action("Edit", "KhachHang", new { id = Model.MaKH })">
-            <i class="fa-solid fa-pen-to-square"></i> Sửa
-        </a>
-        <a class="btn btn-danger me-2 text-white" href="@Url.Action("Delete", "KhachHang", new { id = Model.MaKH })">
-            <i class="fa-solid fa-trash"></i> Xóa
-        </a>
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-   </div>
-    
 </div>

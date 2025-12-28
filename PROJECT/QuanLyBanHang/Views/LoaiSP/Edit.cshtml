@@ -1,49 +1,70 @@
 ﻿@model QuanLyBanHang.Models.LoaiSPDto
 @{
-    ViewBag.Title = "Sửa Loại sản phẩm";
+    ViewBag.Title = "Chỉnh sửa loại sản phẩm";
 }
 
-<div class=" container">
-    <h4 class="text-success mb-3">
-        Sửa Thông Tin Loại sản phẩm
-    </h4>
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "LoaiSP")" class="text-success text-decoration-none">Loại Sản Phẩm</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "LoaiSP", new { id = Model.MaLoai })" class="text-success text-decoration-none">@Model.MaLoai</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+        </ol>
+    </nav>
 
-    <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-light">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="md-card">
+                <div class="text-center mb-4">
+                    <div class="p-3 bg-warning-subtle rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-folder-open text-warning fs-2"></i>
+                    </div>
+                    <h4 class="fw-bold">Cập nhật loại sản phẩm</h4>
+                    <p class="text-muted small">Cập nhật tên gọi hoặc phân loại lại nhóm danh mục của mục này.</p>
+                </div>
 
-        <div class="form-group mb-3">
-            <label asp-for="MaLoai" class="form-label"></label>
-            <input asp-for="MaLoai" class="form-control" readonly />
-        </div>
-        <div class="form-group mb-3">
-            <label asp-for="TenLoai" class="form-label"></label>
-            <input asp-for="TenLoai" class="form-control" />
-            <span asp-validation-for="TenLoai" class="text-danger"></span>
-        </div>
+                <form asp-action="Edit" method="post">
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger shadow-sm mb-4" })
 
-        <!-- Nhóm sản phẩm -->
-        <div class="form-group mb-3">
-            <label asp-for="MaNhom" class="form-label fw-semibold">
-                <i class="fa-solid fa-layer-group me-1"></i>
-            </label>
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Mã loại sản phẩm (Read-only)</label>
+                        <div class="p-2 px-3 bg-light rounded-3 font-monospace fw-bold text-muted">
+                            <i class="fa-solid fa-lock me-2"></i>@Model.MaLoai
+                            <input type="hidden" asp-for="MaLoai" />
+                        </div>
+                    </div>
 
-            <div class="input-group gap-2">
-                <select asp-for="MaNhom" asp-items="ViewBag.MaNhom" class="form-select">
-                    <option value="">-- Chọn nhóm SP --</option>
-                </select>
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Tên loại sản phẩm mới</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-tag text-muted"></i></span>
+                            <input asp-for="TenLoai" class="form-control border-0 bg-transparent py-2" />
+                        </div>
+                        <span asp-validation-for="TenLoai" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Nhóm danh mục hiện tại</label>
+                        <div class="input-group border rounded-3 bg-light overflow-hidden">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-layer-group text-muted"></i></span>
+                            <select asp-for="MaNhom" asp-items="ViewBag.MaNhom" class="form-select border-0 bg-transparent py-2"></select>
+                        </div>
+                        <span asp-validation-for="MaNhom" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <hr class="opacity-10 my-4">
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success py-2 fw-bold shadow-sm">
+                            <i class="fa-solid fa-save me-2"></i>Cập nhật thông tin
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaLoai" class="btn btn-light border py-2 text-muted fw-bold">
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
             </div>
-            <span asp-validation-for="MaNhom" class="text-danger"></span>
-        </div>              
-
-        <div class="mt-4">
-            <button type="submit" class="btn btn-warning text-white me-2">
-                <i class="fa-solid fa-save"></i> Cập nhật
-            </button>
-            <a asp-action="Details" asp-route-id="@Model.MaLoai" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left"></i> Quay lại
-            </a>
         </div>
-    </form>
-
-    
+    </div>
 </div>

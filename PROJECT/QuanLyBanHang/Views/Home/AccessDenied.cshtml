@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Không có quyền truy cập";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card text-center py-5 shadow-lg border-0 animate__animated animate__shakeX">
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-danger-subtle rounded-circle" style="width: 100px; height: 100px;">
+                        <i class="fa-solid fa-user-lock text-danger fs-1"></i>
+                    </div>
+                </div>
+
+                <h2 class="fw-800 text-dark mb-3">Truy Cập Bị Hạn Chế</h2>
+                <p class="text-muted mb-5 px-md-5">
+                    Xin lỗi, tài khoản của bạn không có đủ thẩm quyền để truy cập vào phân vùng này. 
+                    Mọi nỗ lực truy cập trái phép đều được ghi nhận bởi hệ thống an ninh.
+                </p>
+
+                <div class="d-grid gap-3 px-md-5">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-success py-3 fw-bold shadow-sm">
+                        <i class="fa-solid fa-house me-2"></i>Quay lại Trang Chủ
+                    </a>
+                    <a href="javascript:history.back()" class="btn btn-light border py-3 fw-bold">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang trước
+                    </a>
+                </div>
+                
+                <div class="mt-5 border-top pt-4 mx-4">
+                    <p class="small text-muted mb-0">Liên hệ qua Hotline <strong>1900-xxxx</strong> nếu bạn tin rằng đây là sự nhầm lẫn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

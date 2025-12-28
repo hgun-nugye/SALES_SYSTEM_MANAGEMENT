@@ -9,7 +9,7 @@ namespace QuanLyBanHang.Models
 	{
 		[Key]
 		[Display(Name = "Mã xã")]
-		public short MaXa { get; set; }
+		public int MaXa { get; set; }
 
 		[Required(ErrorMessage = "Tên xã không được để trống")]
 		[StringLength(90, ErrorMessage = "Tên xã không được quá 90 ký tự")]
@@ -29,7 +29,7 @@ namespace QuanLyBanHang.Models
 	public class XaDTO
 	{
 		[Display(Name = "Mã xã")]
-		public short? MaXa { get; set; }
+		public int? MaXa { get; set; }
 
 		[Display(Name = "Tên xã")]
 		public string? TenXa { get; set; }

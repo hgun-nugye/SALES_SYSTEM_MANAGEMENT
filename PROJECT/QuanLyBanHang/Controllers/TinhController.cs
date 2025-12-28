@@ -3,8 +3,11 @@ using QuanLyBanHang.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class TinhController : Controller
 	{
 		private readonly TinhService _tinhService;
@@ -108,6 +111,7 @@ namespace QuanLyBanHang.Controllers
 
 		// DELETE - GET
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			if (string.IsNullOrEmpty(id))
@@ -124,6 +128,7 @@ namespace QuanLyBanHang.Controllers
 		// DELETE - POST
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			if (string.IsNullOrEmpty(id))

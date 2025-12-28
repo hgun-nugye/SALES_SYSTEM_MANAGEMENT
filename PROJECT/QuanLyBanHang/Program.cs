@@ -27,9 +27,11 @@ builder.Services.AddScoped<LoaiSPService>();
 builder.Services.AddScoped<NhaCCService>();
 builder.Services.AddScoped<NhomSPService>();
 builder.Services.AddScoped<SanPhamService>();
+builder.Services.AddScoped<TaiKhoanService>();
 builder.Services.AddScoped<TinhService>();
 builder.Services.AddScoped<XaService>();
 builder.Services.AddScoped<TrangThaiService>();
+builder.Services.AddScoped<BaoCaoService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

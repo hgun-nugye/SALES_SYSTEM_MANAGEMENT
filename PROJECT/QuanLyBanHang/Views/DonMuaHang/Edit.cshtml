@@ -1,129 +1,100 @@
 ﻿@model QuanLyBanHang.Models.DonMuaHangEditCTMH
 
 @{
-    ViewBag.Title = "Sửa Đơn mua hàng";
+    ViewBag.Title = "Chỉnh sửa đơn nhập hàng";
 }
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-
-<div class="container border p-4 rounded shadow-sm bg-light">
-
-    <h4 class="mb-3 text-success">
-        Sửa Đơn mua hàng
-    </h4>
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "DonMuaHang")" class="text-success text-decoration-none">Đơn Mua Hàng</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Details", "DonMuaHang", new { id = Model.MaDMH })" class="text-success text-decoration-none">@Model.MaDMH</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+        </ol>
+    </nav>
 
     <form asp-action="Edit" method="post">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger shadow-sm mb-4" })
         <input type="hidden" asp-for="MaDMH" />
 
-        <!-- THÔNG TIN ĐƠN -->
-        <div class="row g-3">
-            <div class="col-md-3">
-                <label asp-for="NgayMH" class="form-label fw-bold"></label>
-                <input asp-for="NgayMH" type="date" class="form-control" />
-                <span asp-validation-for="NgayMH" class="text-danger"></span>
+        <div class="row g-4">
+            <!-- Left: Transaction Info -->
+            <div class="col-lg-4">
+                <div class="md-card">
+                    <h5 class="fw-bold mb-4">Chứng từ nhập kho</h5>
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Mã chứng từ</label>
+                        <div class="p-2 px-3 bg-light rounded-3 font-monospace fw-bold">#@Model.MaDMH</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Ngày nhập hàng</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-calendar text-muted"></i></span>
+                            <input asp-for="NgayMH" type="date" class="form-control border-0 bg-transparent" />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-uppercase fw-bold text-muted">Nhà cung cấp</label>
+                        <div class="input-group border rounded-3 bg-light">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-truck text-muted"></i></span>
+                            <select asp-for="MaNCC" asp-items="ViewBag.MaNCC" class="form-select border-0 bg-transparent"></select>
+                        </div>
+                    </div>
+
+                    <hr class="opacity-10 my-4">
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success shadow-sm py-2">
+                            <i class="fa-solid fa-save me-2"></i>Lưu thay đổi
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaDMH" class="btn btn-light border py-2">Hủy bỏ</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-3">
-                <label asp-for="MaNCC" class="form-label fw-bold"></label>
-                <select asp-for="MaNCC" asp-items="ViewBag.MaNCC" class="form-select">
-                    <option value="">-- Chọn nhà cung cấp --</option>
-                </select>
-                <span asp-validation-for="MaNCC" class="text-danger"></span>
-            </div>
-
-            <div class="col-md-3">
-                <label asp-for="MaNV" class="form-label fw-bold"></label>
-                <select asp-for="MaNV" asp-items="ViewBag.MaNV" class="form-select">
-                    <option value="">-- Chọn nhân viên --</option>
-                </select>
-                <span asp-validation-for="MaNV" class="text-danger"></span>
-            </div>
-
-            <div class="col-md-3">
-                <label asp-for="MaTTMH" class="form-label fw-bold"></label>
-                <select asp-for="MaTTMH" asp-items="ViewBag.MaTTMH" class="form-select">
-                    <option value="">-- Chọn trạng thái --</option>
-                </select>
-                <span asp-validation-for="MaTTMH" class="text-danger"></span>
+            <!-- Right: Item List -->
+            <div class="col-lg-8">
+                <div class="md-card">
+                    <h5 class="fw-bold mb-4">Chi tiết hàng hóa nhập</h5>
+                    <div class="table-responsive border rounded-4 overflow-hidden">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="ps-4">Sản Phẩm</th>
+                                    <th class="text-center" style="width: 120px">Số Lượng</th>
+                                    <th class="text-end pe-4" style="width: 200px">Giá Nhập</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.ChiTiet.Count; i++)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <input type="hidden" asp-for="ChiTiet[i].MaDMH" />
+                                            <input type="hidden" asp-for="ChiTiet[i].MaSP" />
+                                            <input type="hidden" asp-for="ChiTiet[i].TenSP" />
+                                            <div class="fw-bold">@Model.ChiTiet[i].TenSP</div>
+                                            <div class="small text-muted font-monospace">@Model.ChiTiet[i].MaSP</div>
+                                        </td>
+                                        <td>
+                                            <input type="number" asp-for="ChiTiet[i].SLM" class="form-control border-0 bg-light-subtle text-center" />
+                                        </td>
+                                        <td class="pe-4">
+                                            <div class="input-group border-0 bg-light-subtle rounded">
+                                                <input type="number" asp-for="ChiTiet[i].DGM" class="form-control border-0 bg-transparent text-end" />
+                                                <span class="input-group-text border-0 bg-transparent small text-muted">₫</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <hr />
-
-        <!-- BẢNG CHI TIẾT SẢN PHẨM -->
-        <h4>Chi tiết sản phẩm</h4>
-
-        <table class="table  table-striped">
-            <thead>
-                <tr class="table-warning">
-                    <th>Sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                </tr>
-            </thead>
-            @* <tbody>
-                @for (int i = 0; i < Model.ChiTiet.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <input type="hidden" asp-for="ChiTiet[i].MaDMH" />
-
-                            <input type="hidden" asp-for="ChiTiet[i].MaSP" />
-                            <span>@Model.ChiTiet[i].TenSP</span>
-
-                        </td>
-                        <td>
-                            <input asp-for="ChiTiet[i].SLM" class="form-control" />
-                        </td>
-                        <td>
-                            <input asp-for="ChiTiet[i].DGM" class="form-control" />
-                        </td>
-                    </tr>
-                }
-            </tbody> *@
-
-            <tbody>
-                @for (int i = 0; i < Model.ChiTiet.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @* Lưu trữ toàn bộ thông tin định danh *@
-                            <input type="hidden" asp-for="ChiTiet[i].MaDMH" />
-                            <input type="hidden" asp-for="ChiTiet[i].MaSP" />
-                            <input type="hidden" asp-for="ChiTiet[i].TenSP" />
-
-                            <span>@Model.ChiTiet[i].TenSP</span>
-                        </td>
-                        <td>
-                            @* Sử dụng type="number" để đảm bảo trình duyệt gửi đúng định dạng số *@
-                            <input type="number" asp-for="ChiTiet[i].SLM" class="form-control" step="1" />
-                            <span asp-validation-for="ChiTiet[i].SLM" class="text-danger"></span>
-                        </td>
-                        <td>
-                            <input type="number" asp-for="ChiTiet[i].DGM" class="form-control" step="0.01" />
-                            <span asp-validation-for="ChiTiet[i].DGM" class="text-danger"></span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <button type="submit" class="btn btn-warning text-white">
-            <i class="fa-solid fa-save"></i> Cập nhật
-        </button>
-
-        <a asp-action="Details" asp-route-id="@Model.MaDMH" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-
     </form>
 </div>

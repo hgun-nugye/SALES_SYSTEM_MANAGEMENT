@@ -1,149 +1,115 @@
 ﻿@model IEnumerable<QuanLyBanHang.Models.XaDTO>
 
 @{
-    ViewBag.Title = "Quản lý Xã";
+    ViewBag.Title = "Quản lý địa giới - Xã/Phường";
 }
 
-<style>
-    .search-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-    }
-
-        .search-wrapper input {
-            padding-left: 38px !important;
-            border-radius: 8px;
-            background: #f8f9fa;
-        }
-
-        .search-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-    .table {
-        overflow-x: auto;
-        white-space: nowrap;
-        width: 100%;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f5faff;
-        transition: 0.2s;
-    }
-</style>
-
 <div class="container">
-   
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-        <h4 class="mb-5 text-success">
-            Danh sách Xã
-        </h4>
-        <a href="@Url.Action("Index", "TrangThai")" class="btn btn-success mb-5">
-                <i class="fa-solid fa-list-check"></i> Quản lý Tỉnh
-        </a>
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+          
+        </div>
+        
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index", "Tinh")" class="btn btn-outline-success shadow-sm">
+                <i class="fa-solid fa-map-location-dot me-2"></i>Quản lý Tỉnh/TP
+            </a>
+            <a href="@Url.Action("Create", "Xa")" class="btn btn-success shadow-sm">
+                <i class="fa-solid fa-location-dot me-2"></i>Thêm Xã mới
+            </a>
+        </div>
     </div>
 
-    <!--  Form -->
-    <form id="Form" method="get" class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
-        <div class="search-wrapper flex-grow-1">
-            <i class="fa fa-search"></i>
-            <input id="searchBox" type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Tìm tên, mã xã...">
-        </div>
-
-        <div class="d-flex flex-wrap align-items-center gap-2">
-            <div class="d-flex align-items-center gap-2 w-50">
-                <label class="w-100 text-end opacity-50">Tỉnh/Thành phố:</label>
-                 <select asp-items="ViewBag.TinhList" name="maTinh" class="form-control w-100" id="maTinhSelect">
-                <option value="">-- Tỉnh --</option>
-            </select>
+    <!-- Filter Card -->
+    <div class="md-card mb-4 bg-light border-0">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-bold text-muted text-uppercase">Tìm kiếm địa bàn</label>
+                <div class="input-group bg-white border rounded-3 overflow-hidden">
+                    <span class="input-group-text bg-transparent border-0"><i class="fa-solid fa-magnifying-glass opacity-50"></i></span>
+                    <input id="searchBox" type="text" class="form-control border-0" placeholder="Nhập tên Xã, Tỉnh hoặc Mã vùng...">
+                </div>
             </div>
-
-            <button type="button" id="btnClear" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i>Reset</button>
-            <a href="@Url.Action("Create", "Xa")" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i> Add</a>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted text-uppercase">Lọc theo Tỉnh/Thành</label>
+                <select id="maTinhSelect" asp-items="ViewBag.TinhList" class="form-select border rounded-3">
+                    <option value="">Tất cả các tỉnh</option>
+                </select>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <button type="button" id="btnClear" class="btn btn-light border px-4">
+                    <i class="fa-solid fa-rotate-left me-2"></i>Reset lọc
+                </button>
+            </div>
         </div>
-    </form>
+    </div>
 
-   <div class="table">
-        <table class="table table-bordered table-hover align-middle text-center shadow-sm">
-            <thead class="table-success">
+    <!-- Data Table -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead>
                 <tr>
-                    <th class="w-15">Mã Xã</th>
-                    <th class="w-25">Tên Xã</th>
-                    <th class="w-15">Mã Tỉnh</th>
-                    <th class="w-25">Tên Tỉnh</th>
+                    <th class="ps-4" style="width: 15%">Mã Xã</th>
+                    <th>Tên Xã / Phường</th>
+                    <th>Thuộc Tỉnh / Thành Phố</th>
                 </tr>
             </thead>
-            <tbody class="text-start">
-                @foreach (var item in Model)
+            <tbody id="xaTableBody">
+                @if (Model != null && Model.Any())
                 {
-                    <tr class="clickable-row"
-                        data-href="@Url.Action("Details", "Xa", new { id = item.MaXa })"
-                        data-tenxa="@item.TenXa"
-                        data-maxa="@item.MaXa"
-                        data-matinh="@item.MaTinh"
-                        data-tentinh="@item.TenTinh">
-
-
-                        <td class=" text-center">@item.MaXa</td>
-                        <td>@item.TenXa</td>
-                        <td class=" text-center">@item.MaTinh</td>
-                        <td>@item.TenTinh</td>
-                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="cursor: pointer" 
+                            onclick="window.location='@Url.Action("Details", "Xa", new { id = item.MaXa })'"
+                            data-tenxa="@item.TenXa"
+                            data-maxa="@item.MaXa"
+                            data-matinh="@item.MaTinh"
+                            data-tentinh="@item.TenTinh">
+                            <td class="ps-4">
+                                <span class="badged bg-light text-dark font-monospace border">#@item.MaXa</span>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark">@item.TenXa</div>
+                            </td>
+                            <td>
+                                <div class="badged bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
+                                    <i class="fa-solid fa-city me-2 small"></i>@item.TenTinh
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
-   </div>
+    </div>
 </div>
 
 @section Scripts {
     <script>
-        // --- Hàm lọc bảng ---
         function filterTable() {
-            let search = document.getElementById("searchBox").value.toLowerCase().trim();
-            let tinh = document.getElementById("maTinhSelect").value;
+            const search = document.getElementById("searchBox").value.toLowerCase().trim();
+            const tinh = document.getElementById("maTinhSelect").value;
 
-            document.querySelectorAll("tbody tr").forEach(row => {
-                let tenXa   = row.dataset.tenxa.toLowerCase();
-                let maXa    = row.dataset.maxa.toLowerCase();
-                let maTinh  = row.dataset.matinh;
-                let tenTinh = row.dataset.tentinh.toLowerCase();
+            document.querySelectorAll("#xaTableBody tr").forEach(row => {
+                const tenXa = row.dataset.tenxa.toLowerCase();
+                const maXa = row.dataset.maxa.toLowerCase();
+                const maTinh = row.dataset.matinh;
+                const tenTinh = row.dataset.tentinh.toLowerCase();
 
-                let matchSearch =
-                    tenXa.includes(search) ||
-                    maXa.includes(search) ||
-                    tenTinh.includes(search) ||
-                    maTinh.includes(search);
-
-                let matchTinh =
-                    tinh === "" || maTinh === tinh;
+                const matchSearch = tenXa.includes(search) || maXa.includes(search) || tenTinh.includes(search);
+                const matchTinh = tinh === "" || maTinh === tinh;
 
                 row.style.display = (matchSearch && matchTinh) ? "" : "none";
             });
         }
 
-        // --- Sự kiện ---
         document.getElementById("searchBox").addEventListener("input", filterTable);
         document.getElementById("maTinhSelect").addEventListener("change", filterTable);
-
-        // --- Nút reset ---
-        document.getElementById("btnClear").addEventListener("click", function () {
+        document.getElementById("btnClear").addEventListener("click", () => {
             document.getElementById("searchBox").value = "";
             document.getElementById("maTinhSelect").value = "";
             filterTable();
         });
-
-        // clickable row giữ nguyên
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     document.querySelectorAll(".clickable-row").forEach(row => {
-        //         row.addEventListener("click", function () {
-        //             window.location = this.dataset.href;
-        //         });
-        //     });
-        // });
     </script>
 }

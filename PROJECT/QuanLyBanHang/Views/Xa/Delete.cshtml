@@ -1,34 +1,63 @@
 ﻿@model QuanLyBanHang.Models.Xa
 
 @{
-    ViewBag.Title = "Xóa Xã ";
+    ViewBag.Title = "Xác nhận xóa địa danh";
 }
 
 <div class="container">
-    <h4 class="text-danger mb-3">
-       Xóa Xã
-    </h4>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Xa")" class="text-success text-decoration-none">Xã / Phường</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Xác nhận xóa</li>
+        </ol>
+    </nav>
 
-    <div class="alert alert-warning shadow-sm">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        Bạn có chắc muốn xóa <strong>@Model.TenXa</strong> không?
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card border-0 shadow-lg text-center">
+                <div class="p-3 bg-danger-subtle rounded-circle d-inline-block mb-3">
+                    <i class="fa-solid fa-location-xmark text-danger fs-1"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Gỡ bỏ địa danh?</h4>
+                <p class="text-muted">Bạn đang thực hiện xóa <strong>@Model.TenXa</strong>. Việc này có thể ảnh hưởng đến địa chỉ của khách hàng hoặc nhà cung cấp đang thuộc xã này.</p>
+
+                <div class="my-4 p-4 bg-light rounded-4 text-start small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Mã vùng:</span>
+                        <span class="font-monospace fw-bold">#@Model.MaXa</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Địa danh:</span>
+                        <span class="fw-bold">@Model.TenXa</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Chủ quản:</span>
+                        <span class="fw-bold text-success">@Model.TenTinh</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning border-0 small text-start mb-4 text-center">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <strong>Thận trọng:</strong> Chỉ xóa khi địa danh này không còn liên kết với bất kỳ hồ sơ nào.
+                </div>
+
+                <form id="deleteForm" asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="MaXa" />
+                    
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-danger py-3 fw-bold" onclick="confirmDelete()">
+                            <i class="fa-solid fa-trash-can me-2"></i>Xác nhận gỡ bỏ địa danh
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.MaXa" class="btn btn-light border py-2 text-muted fw-bold">
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="border p-4 rounded shadow-sm bg-light">
-        <p><strong>@Html.DisplayNameFor(m => m.MaXa):</strong> @Model.MaXa</p>
-        <p><strong>@Html.DisplayNameFor(m => m.TenXa):</strong> @Model.TenXa</p>
-        <p><strong>Tỉnh:</strong> @Model.TenTinh</p>
-    </div>
-
-    <form id="deleteForm" asp-action="Delete" method="post" class="mt-3">
-        <input type="hidden" asp-for="MaXa" />
-        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-            <i class="fa-solid fa-trash-can me-2"></i> Xóa
-        </button>
-        <a asp-action="Details" asp-route-id="@Model.MaXa" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-        </a>
-    </form>
 </div>
 
 @section Scripts {
@@ -36,14 +65,14 @@
     <script>
         function confirmDelete() {
             Swal.fire({
-                title: 'Xác nhận xóa?',
-                text: 'Bạn có chắc chắn muốn xóa nhà cung cấp này?',
+                title: 'Hủy đăng ký địa danh?',
+                text: 'Hành động này sẽ xóa mục này khỏi cơ sở dữ liệu địa giới.',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Xóa',
+                confirmButtonText: 'Đồng ý xóa',
                 cancelButtonText: 'Hủy',
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6'
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('deleteForm').submit();

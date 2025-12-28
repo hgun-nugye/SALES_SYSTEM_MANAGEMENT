@@ -1,0 +1,66 @@
+@model QuanLyBanHang.Models.TaiKhoan
+
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+}
+
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "TaiKhoan")" class="text-success text-decoration-none">Tài Khoản</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Hồ sơ #@Model.MaTK</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="md-card text-center border-0 shadow-lg">
+                <div class="p-4 bg-light-subtle rounded-4 mb-4">
+                    <div class="avatar-wrapper mb-3 mx-auto shadow-sm" style="width: 100px; height: 100px; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-user-shield text-success fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-1">@Model.TenDN</h4>
+                    <span class="badged @(Model.VaiTro ? "bg-success-subtle text-success" : "bg-info-subtle text-info") border px-3 py-2 rounded-pill small">
+                        <i class="fa-solid @(Model.VaiTro ? "fa-crown" : "fa-user-tie") me-2"></i>@Model.TenVaiTro
+                    </span>
+                </div>
+
+                <div class="text-start px-2">
+                    <div class="mb-4">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Mã định danh hệ thống</label>
+                        <div class="h6 fw-bold font-monospace">@Model.MaTK</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Trạng thái bảo mật</label>
+                        <div class="h6 mb-0 text-success fw-medium">
+                            <i class="fa-solid fa-lock me-2"></i>@Model.MatKhau
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="opacity-10 my-4">
+
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.MaTK" class="btn btn-success py-2 fw-bold">
+                        <i class="fa-solid fa-user-pen me-2"></i>Cập nhật tài khoản
+                    </a>
+                    <a asp-action="Index" class="btn btn-light border py-2 text-muted fw-bold">
+                        Quay lại danh sách
+                    </a>
+                </div>
+            </div>
+
+            @if (Model.VaiTro)
+            {
+                <div class="md-card mt-4 border-0 bg-info-subtle text-info-emphasis">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-circle-info fs-4 me-3"></i>
+                        <p class="mb-0 small fw-medium">Tài khoản quản trị có toàn quyền truy cập các chức năng báo cáo và quản lý nhân sự.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

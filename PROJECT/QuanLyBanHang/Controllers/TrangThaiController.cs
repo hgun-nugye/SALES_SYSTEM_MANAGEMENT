@@ -2,8 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using QuanLyBanHang.Models;
 using QuanLyBanHang.Services;
 
+using QuanLyBanHang.Filters;
+
 namespace QuanLyBanHang.Controllers
 {
+	[Authorize]
 	public class TrangThaiController : Controller
 	{
 		private readonly TrangThaiService _service;
@@ -111,6 +114,7 @@ namespace QuanLyBanHang.Controllers
 		}
 
 		[HttpGet]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> Delete(string id)
 		{
 			var model = await _service.GetById(id);
@@ -123,6 +127,7 @@ namespace QuanLyBanHang.Controllers
 
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
+		[NoDeleteForStaff]
 		public async Task<IActionResult> DeleteConfirmed(string id)
 		{
 			try

@@ -30,16 +30,7 @@ namespace QuanLyBanHang.Models
 		[StringLength(10)]
 		[Display(Name = "Mã Khách Hàng")]
 		public string MaKH { get; set; } = string.Empty;
-
-		[Required(ErrorMessage = "Địa chỉ giao hàng không được để trống.")]
-		[StringLength(255, ErrorMessage = "Địa chỉ tối đa 255 ký tự.")]
-		[Display(Name = "Địa Chỉ Giao Hàng")]
-		public string DiaChiDBH { get; set; } = string.Empty;
-
-		[Required(ErrorMessage = "Mã xã không được để trống.")]
-		[Display(Name = "Mã Xã")]
-		public short MaXa { get; set; }
-
+				
 		// Tên khách hàng chỉ hiển thị, không map DB
 		[NotMapped]
 		[Display(Name = "Tên Khách Hàng")]
@@ -55,17 +46,7 @@ namespace QuanLyBanHang.Models
 
 		//  CHI TIẾT BÁN
 		[Display(Name = "Chi Tiết Bán Hàng")]
-		public virtual List<CTBH>? CTBHs { get; set; } = new();
-
-		// TRẠNG THÁI ĐƠN BÁN HÀNG
-		[Required(ErrorMessage = "Mã TT không được để trống.")]
-		[Display(Name = "Mã Trạng thái")]
-		public string? MaTTBH { get; set; }
-
-		[NotMapped]
-		[Display(Name = "Trạng thái")]
-		public string? TenTTBH { get; set; }
-
+		public virtual List<CTBH>? CTBHs { get; set; } = new();		
 	}
 
 	// DTO hiển thị chi tiết đơn bán
@@ -98,25 +79,13 @@ namespace QuanLyBanHang.Models
 
 		[Display(Name = "Tên Tỉnh")]
 		public string? TenTinh { get; set; }
-
-		[Display(Name = "Địa Chỉ Đơn Bán Hàng")]
-		public string? DiaChiDBH { get; set; }
-
-		[Display(Name = "Mã Xã")]
-		public short? MaXa { get; set; }
-
-		[Display(Name ="Mã trạng thái đơn hàng")]
-		public string? MaTTBH { get; set; }
-
+		
 		[Display(Name = "Tên Xã")]
 		public string? TenXa { get; set; }
 		
 		[NotMapped]
 		[Display(Name = "Thành Tiền")]
 		public decimal? ThanhTien => SLB * DGB;
-
-		[Display(Name = "Trạng thái đơn hàng")]
-		public string? TenTTBH { get; set; }
 	}
 
 	// Model chỉnh sửa đơn bán
@@ -136,15 +105,6 @@ namespace QuanLyBanHang.Models
 		[Display(Name = "Mã Khách Hàng")]
 		public string MaKH { get; set; } = string.Empty;
 
-		[Required(ErrorMessage = "Địa chỉ đơn bán hàng không được để trống.")]
-		[StringLength(255, ErrorMessage = "Địa chỉ tối đa 255 ký tự.")]
-		[Display(Name = "Địa Chỉ Đơn Bán Hàng")]
-		public string DiaChiDBH { get; set; } = string.Empty;
-
-		[Required(ErrorMessage = "Mã xã không được để trống.")]
-		[Display(Name = "Mã Xã")]
-		public short MaXa { get; set; }
-
 		[NotMapped]
 		public string? TenXa { get; set; }
 		[NotMapped]
@@ -153,9 +113,5 @@ namespace QuanLyBanHang.Models
 		[Required(ErrorMessage = "Chi tiết bán hàng không được để trống.")]
 		[Display(Name = "Chi Tiết Bán Hàng")]
 		public List<CTBH> ChiTiet { get; set; } = new();
-
-		[Required(ErrorMessage = "Trạng thái đơn hàng không được để trống.")]
-		[Display(Name = "Trạng thái đơn hàng")]
-		public string MaTTBH { get; set; } = string.Empty;
 	}
 }

@@ -27,24 +27,7 @@
             min-height: 100vh;
             background-color: #f8f9fa;
         }
-
-        .navbar {
-            background-color: #198754;
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
-        }
-
-        .navbar-brand {
-            color: white !important;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: rgba(255,255,255,.85);
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: white;
-        }
+               
 
         .product-card {
             transition: transform 0.3s, box-shadow 0.3s;
@@ -70,104 +53,13 @@
             font-size: 1.25rem;
         }       
 
-        .navbar-nav .nav-item .nav-link.btn-login,
-        .navbar-nav .nav-item .nav-link.btn-signup {
-            border: 2px solid white !important;
-            color: white !important;
-            background-color: transparent !important;
-            border-radius: 8px;
-            padding: 8px 20px !important;
-            font-weight: bold !important;
-            opacity: 1 !important; 
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            margin: 5px 0;
-        }
-
-            .navbar-nav .nav-item .nav-link.btn-login:hover,
-            .navbar-nav .nav-item .nav-link.btn-login:focus,
-            .navbar-nav .nav-item .nav-link.btn-login:active,
-            .navbar-nav .nav-item .nav-link.btn-signup:hover {
-                background-color: white !important;
-                color: #198754 !important;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            }
-
-            .navbar-nav .nav-item .nav-link.btn-login i {
-                color: white !important;
-            }
-
-            .navbar-nav .nav-item .nav-link.btn-login:hover i {
-                color: #198754 !important;
-            }
-
         .main-content {
-            min-height: calc(100vh - 100px);
+            min-height: calc(100vh);
         }
     </style>
 </head>
 <body>
-    <!-- Header với Login/Sign Up -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-lg">
-        <div class="container">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                <img src="~/images/logo.png" class="rounded-circle text-center me-4" style="width: 7%"/>Cửa hàng mỹ phẩm chính hãng
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto ">
-                    @if (Context.Session.GetString("IsLoggedIn") == "true")
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-user me-1"></i>
-                                @Context.Session.GetString("UserName")
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                @if (Context.Session.GetString("IsCustomer") == "true")
-                                {
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "DonBanHang")">
-                                        <i class="fa-solid fa-shopping-cart me-2"></i>Đơn hàng của tôi</a></li>
-                                }
-                                else
-                                {
-                                    <li><a class="dropdown-item" href="@Url.Action("Index", "SanPham")">
-                                        <i class="fa-solid fa-box me-2"></i>Quản lý sản phẩm</a></li>
-                                }
-                                <li><hr class="dropdown-divider"></li>                               
-                                <li>
-                                    <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="confirmLogout()">
-                                        <i class="fa-solid fa-sign-out-alt me-2"></i>Đăng xuất
-                                    </a>
-                                </li>
-
-                                <form id="logoutForm" action="@Url.Action("LogoutConfirmed", "Home")" method="post" style="display:none;">
-                                    @Html.AntiForgeryToken()
-                                </form>
-                            </ul>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item pe-4">
-                            <a class="nav-link btn-signup me-2" href="@Url.Action("Login", "Home")">
-                                <i class="fa-solid fa-sign-in-alt me-1"></i>Đăng nhập
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-signup" href="@Url.Action("SignUp", "Home")">
-                                <i class="fa-solid fa-user-plus me-1"></i>Đăng ký
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+   
     <!-- Main Content -->
     <main class="main-content">
         @RenderBody()
