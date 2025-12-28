@@ -148,15 +148,21 @@ BEGIN
         D.NgayBH,
         D.MaKH,
         K.TenKH,
+        X.MaXa,
+        X.TenXa,
+        T.MaTinh,
+        T.TenTinh,
         C.MaSP,
         S.TenSP,
         C.SLB,
         C.DGB,
-        C.SLB * C.DGB AS ThanhTien
+        (C.SLB * C.DGB) AS ThanhTien
     FROM DonBanHang D
     JOIN KhachHang K ON K.MaKH = D.MaKH
     JOIN CTBH C ON C.MaDBH = D.MaDBH
     JOIN SanPham S ON S.MaSP = C.MaSP
+    LEFT JOIN Xa X ON X.MaXa = K.MaXa
+    LEFT JOIN Tinh T ON T.MaTinh = X.MaTinh
     WHERE D.MaDBH = @MaDBH;
 END;
 GO
@@ -165,31 +171,43 @@ CREATE OR ALTER PROC DonBanHang_Search
 (
     @Search NVARCHAR(100) = NULL,
     @Month INT = NULL,
-    @Year INT = NULL
+    @Year INT = NULL,
+    @MaTTBH CHAR(3) = NULL
 )
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT
+    SELECT 
         D.MaDBH,
         D.NgayBH,
         D.MaKH,
+		C.DGB,
+		C.SLB,
         K.TenKH,
+		X.MaXa,
+		X.TenXa,
+		T.MaTinh,
+		T.TenTinh,
+        STRING_AGG(C.MaSP, ', ') AS MaSP,
         STRING_AGG(S.TenSP, N', ') AS TenSP,
-        SUM(C.SLB * C.DGB) AS TongTien
+
+        ISNULL(SUM(C.SLB * C.DGB), 0) AS TongTien
     FROM DonBanHang D
     JOIN KhachHang K ON K.MaKH = D.MaKH
     LEFT JOIN CTBH C ON C.MaDBH = D.MaDBH
     LEFT JOIN SanPham S ON S.MaSP = C.MaSP
+	LEFT JOIN Xa X ON X.MaXa = K.MaXa
+	LEFT JOIN Tinh T ON T.MaTinh = X.MaTinh
     WHERE
-        (@Search IS NULL OR
-         D.MaDBH LIKE '%' + @Search + '%' OR
-         K.TenKH LIKE N'%' + @Search + '%')
+        (@Search IS NULL OR @Search = ''
+            OR D.MaDBH LIKE '%' + @Search + '%'
+            OR K.TenKH LIKE N'%' + @Search + '%'
+        )
         AND (@Month IS NULL OR MONTH(D.NgayBH) = @Month)
         AND (@Year IS NULL OR YEAR(D.NgayBH) = @Year)
-    GROUP BY D.MaDBH, D.NgayBH, D.MaKH, K.TenKH
-    ORDER BY D.NgayBH DESC;
+    GROUP BY
+        D.MaDBH, D.NgayBH, D.MaKH, K.TenKH,
+		C.DGB, C.SLB, X.MaXa, T.MaTinh, T.TenTinh, X.TenXa
 END;
 GO
-

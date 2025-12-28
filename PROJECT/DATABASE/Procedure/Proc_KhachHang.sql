@@ -110,6 +110,62 @@ BEGIN
 END;
 GO
 
+-- =========================
+-- Lấy khách hàng theo mã
+-- =========================
+CREATE OR ALTER PROC KhachHang_GetByID
+(
+    @MaKH VARCHAR(10)
+)
+AS
+BEGIN
+    SELECT * FROM KhachHang WHERE MaKH = @MaKH;
+END;
+GO
+
+-- =========================
+-- Lấy khách hàng kèm xã, tỉnh
+-- =========================
+CREATE OR ALTER PROC KhachHang_GetAllWithXa
+AS
+BEGIN
+    SELECT 
+        KH.MaKH,
+        KH.TenKH,
+        KH.GioiTinh,
+        KH.DienThoaiKH,
+        KH.EmailKH,
+        KH.DiaChiKH,
+        KH.AnhKH,
+        X.TenXa,
+        T.TenTinh
+    FROM KhachHang KH
+    LEFT JOIN Xa X ON KH.MaXa = X.MaXa
+    LEFT JOIN Tinh T ON X.MaTinh = T.MaTinh
+    ORDER BY KH.MaKH;
+END;
+GO
+
+-- =========================
+-- Lấy khách hàng theo mã kèm xã, tỉnh
+-- =========================
+CREATE OR ALTER PROC KhachHang_GetByIDWithXa
+(
+    @MaKH VARCHAR(10)
+)
+AS
+BEGIN
+    SELECT 
+        KH.*,
+        X.TenXa,
+        T.TenTinh
+    FROM KhachHang KH
+    LEFT JOIN Xa X ON KH.MaXa = X.MaXa
+    LEFT JOIN Tinh T ON X.MaTinh = T.MaTinh
+    WHERE KH.MaKH = @MaKH;
+END;
+GO
+
 -- 4. Tìm kiếm khách hàng nâng cao
 CREATE OR ALTER PROC KhachHang_Search
 (

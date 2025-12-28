@@ -71,22 +71,58 @@ BEGIN
 END;
 GO
 
--- 2.4. Tìm kiếm Sản phẩm
+CREATE OR ALTER PROC SanPham_GetByID
+(
+    @MaSP VARCHAR(10)
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        S.MaSP, S.TenSP, S.GiaBan,         
+        S.MaTT, S.MaLoai, 
+        L.TenLoai,
+        TT.TenTT,
+        (
+            ISNULL((SELECT SUM(SLM) FROM CTMH WHERE MaSP = S.MaSP), 0) 
+            - 
+            ISNULL((SELECT SUM(SLB) FROM CTBH WHERE MaSP = S.MaSP), 0)
+        ) AS SoLuongTon
+
+    FROM SanPham S
+    JOIN LoaiSP L ON L.MaLoai = S.MaLoai
+    JOIN TrangThai TT ON TT.MaTT = S.MaTT
+
+    WHERE S.MaSP = @MaSP;
+END;
+GO
+
+-- 2.4. Tìm kiếm Sản phẩm (Bổ sung tìm theo Trạng thái và Mã loại)
 CREATE OR ALTER PROC SanPham_Search
 (
     @Search NVARCHAR(100) = NULL,
-    @MaLoai VARCHAR(10) = NULL
+	@MaTT VARCHAR(10) = NULL, 
+    @MaLoai VARCHAR(10) = NULL  
 )
 AS
 BEGIN
     SELECT 
-        S.*, L.TenLoai, TT.TenTT,
+        S.*, 
+        L.TenLoai, 
+        TT.TenTT,
+        -- Tính toán số lượng tồn kho
         (ISNULL((SELECT SUM(SLM) FROM CTMH WHERE MaSP = S.MaSP), 0) - 
          ISNULL((SELECT SUM(SLB) FROM CTBH WHERE MaSP = S.MaSP), 0)) AS SoLuongTon
     FROM SanPham S
     JOIN LoaiSP L ON L.MaLoai = S.MaLoai
     JOIN TrangThai TT ON TT.MaTT = S.MaTT
-    WHERE (@Search IS NULL OR S.TenSP LIKE N'%' + @Search + '%')
-      AND (@MaLoai IS NULL OR S.MaLoai = @MaLoai)
+    WHERE 
+        -- Điều kiện tìm theo tên (nếu @Search không NULL)
+        (@Search IS NULL OR S.TenSP LIKE N'%' + @Search + '%')
+        -- Điều kiện lọc theo Loại (nếu @MaLoai không NULL)
+        AND (@MaLoai IS NULL OR S.MaLoai = @MaLoai)
+        -- Điều kiện lọc theo Trạng thái (nếu @MaTT không NULL)
+        AND (@MaTT IS NULL OR S.MaTT = @MaTT)
 END;
 GO

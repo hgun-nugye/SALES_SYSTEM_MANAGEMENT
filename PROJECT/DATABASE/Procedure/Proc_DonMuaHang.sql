@@ -161,35 +161,47 @@ BEGIN
 END;
 GO
 
+
 CREATE OR ALTER PROC DonMuaHang_Search
 (
     @Search NVARCHAR(100) = NULL,
     @Month INT = NULL,
-    @Year INT = NULL
+    @Year INT = NULL,
+	 @MaTTMH CHAR(3) = NULL
 )
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT
+    SELECT 
         D.MaDMH,
         D.NgayMH,
         D.MaNCC,
         N.TenNCC,
+		
+        -- Gộp tên sản phẩm
+        STRING_AGG(C.MaSP, ', ') AS MaSP, 
         STRING_AGG(S.TenSP, N', ') AS TenSP,
-        SUM(C.SLM * C.DGM) AS TongTien
+
+        -- Tổng tiền
+        1 AS SLM, 
+        ISNULL(SUM(C.SLM * C.DGM), 0) AS DGM
+
     FROM DonMuaHang D
     JOIN NhaCC N ON N.MaNCC = D.MaNCC
     LEFT JOIN CTMH C ON C.MaDMH = D.MaDMH
     LEFT JOIN SanPham S ON S.MaSP = C.MaSP
+
     WHERE
-        (@Search IS NULL OR
-         D.MaDMH LIKE '%' + @Search + '%' OR
-         N.TenNCC LIKE N'%' + @Search + '%')
+        (
+            @Search IS NULL OR @Search = '' OR
+            D.MaDMH LIKE '%' + @Search + '%' OR
+            N.TenNCC LIKE N'%' + @Search + '%' OR
+            D.MaNCC LIKE '%' + @Search + '%' 
+        )
         AND (@Month IS NULL OR MONTH(D.NgayMH) = @Month)
         AND (@Year IS NULL OR YEAR(D.NgayMH) = @Year)
+    
     GROUP BY D.MaDMH, D.NgayMH, D.MaNCC, N.TenNCC
-    ORDER BY D.NgayMH DESC;
 END;
 GO
-
